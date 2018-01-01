@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Optional theme -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.js"></script>
+
+    <meta charset="utf-8">
+    <title>Wigle WIFI Results</title>
+    <style>
+
+    </style>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Disabled</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+
+</head>
+<body>
+
+<!-- WebSource: https://github.com/johnwargo/bootstrap-navbar-complete/blob/master/index.html ,I modified it a bit-->
+
+<style>
+    .table-striped tbody tr:nth-child(odd) td,
+    .table-striped tbody tr:nth-child(odd) th {
+        background-color: #DFF0D8;
+    }
+</style>
+<!----------------------------------------------------------------------->
+<div id="about"></div>
+<br>
+
+
+
+
+<div class="container">
+    <h1 class="page-header">Wifi Application</h1>
+
+
+    <button id="getCSVTable" class="btn btn-default" type="button" name="button"></button>
+    <br>
+
+    <div id="csvTable"><h1>Loading Table. This may take a few seconds.</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-4">
+            <br>
+            <form method="post" enctype="multipart/form-data">
+                <div class="input-group input-group-lg">
+                    <input id="min" type="text" class="form-control" placeholder="min" value="">
+                    <br>
+                    <hr>
+                    <input id="max" type="text" class="form-control" placeholder="max" value="">
+                    <br>
+                    <hr>
+                    <input id="mac3Algo2" type="text" class="form-control" placeholder="MAC 3" value="">
+                    <span class="input-group-btn">
+          </span>
+                </div><br>
+            </form>
+        </div>
+
+        <div class="col-lg-2 col-md-3 col-sm-3">
+            <br>
+            <div class="input-group input-group-lg">
+                <input id="sig1Algo2" type="text" class="form-control" placeholder="Sig1" value="">
+                <br>
+                <hr>
+                <input id="sig2Algo2" type="text" class="form-control" placeholder="Sig2" value="">
+                <br>
+                <hr>
+                <input id="sig3Algo2" type="text" class="form-control" placeholder="Sig3" value="">
+                <span class="input-group-btn">
+          <button id="submitAlgo2" class="btn btn-default" type="button" name="button">Enter</button>
+        </span>
+            </div><br>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 style="color:red;"><span class="glyphicon glyphicon-user"></span> Website Created By:</h4>
+                </div>
+                <div class="modal-body">
+                    <h2>Nissan Goldberg</h2>
+                    <img src="https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAmxAAAAJGY2M2VhZWJjLWVhZjUtNDllZi04YzE4LWJhYmVhNjE4ZmExYQ.jpg" class="img-circle" alt="Cinque Terre"  style="width:18%">
+                    <br>
+                    <hr>
+                    <p>Currently a CS student in Ariel University</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Close</button>
+                    <p>Want to view my github <a href="https://github.com/Ariel-OOP/">Github</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end of modal-->
+
+    <!-- login Modal -->
+    <div class="modal fade" id="loginModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 style="color:red;"><span class="glyphicon glyphicon-lock"></span> Login: </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group input-group-md">
+                        <input id="usernameInput" type="text" class="form-control" placeholder="user name" value="">
+                        <span class="input-group-btn">
+                    <button id="submitUsername" class="btn btn-default" type="button" name="button">Log in</button>
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end of modal-->
+
+    <script
+            src="https://code.jquery.com/jquery-3.0.0.js"
+            integrity="sha256-jrPLZ+8vDxt2FnE1zvZXCkCcebI/C8Dt5xyaQBjxQIo="
+            crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jq-3.2.1/dt-1.10.16/datatables.min.css"/>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jq-3.2.1/dt-1.10.16/datatables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.datatable').dataTable({
+                "pagingType": "full_numbers"
+            });
+            $('.datatable').each(function(){
+                var datatable = $(this);
+                // SEARCH - Add the placeholder for Search and Turn this into in-line form control
+                var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');
+                search_input.attr('placeholder', 'Search');
+                search_input.addClass('form-control input-sm');
+                // LENGTH - Inline-Form control
+                var length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');
+                length_sel.addClass('form-control input-sm');
+            });
+
+
+        });
+    </script>
+
+    <script>
+        /**
+         * Created by nissa on 12/17/2017.
+         */
+
+        <!-----------counter ,source=https://stackoverflow.com/questions/1535631/static-variables-in-javascript--------------------------->
+        var incrTable = (function () {
+            var i = 1;
+
+            return function () {
+                return i++;
+            }
+        })();
+        <!-----------end of counter --------------------------->
+
+        <!-----------start tooltips nissan--------------------------->
+        $(document).ready(function(){
+            $.ajax(
+                {
+                    "url": encodeURI("/getCSVTable")
+                }
+            ).then(
+                function(output) {
+                    $("div#csvTable").html(output);
+                    $('.datatable').dataTable({
+                        "pagingType": "full_numbers"
+                    });
+                    $('.datatable').each(function(){
+                        var datatable = $(this);
+                        // SEARCH - Add the placeholder for Search and Turn this into in-line form control
+                        var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');
+                        search_input.attr('placeholder', 'Search');
+                        search_input.addClass('form-control input-sm');
+                        // LENGTH - Inline-Form control
+                        var length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');
+                        length_sel.addClass('form-control input-sm');
+                    });
+
+                    $.fn.dataTable.ext.search.push(
+                        function( settings, data, dataIndex ) {
+                            var min = parseInt( $('input#min').val(), 10 );
+                            var max = parseInt( $('input#max').val(), 10 );
+                            var age = parseFloat( data[4] ) || 0; // use data for the age column
+
+                            if ( ( isNaN( min ) && isNaN( max ) ) ||
+                                ( isNaN( min ) && age <= max ) ||
+                                ( min <= age   && isNaN( max ) ) ||
+                                ( min <= age   && age <= max ) )
+                            {
+                                return true;
+                            }
+                            return false;
+                        }
+                    );
+
+                    $(document).ready(function() {
+                        var table = $('#csvTable').DataTable();
+
+                        // Event listener to the two range filtering inputs to redraw on input
+                        $('#min, #max').keyup( function() {
+                            table.draw();
+                        } );
+                    } );
+                }
+            );
+
+        });
+
+        $(window).on('load', function() {
+            var decodedCookie = document.cookie;
+            var ca = decodedCookie.split(';');
+            for (var index = 0; index < ca.length; ++index) {
+                if ((ca[index]).includes("user=")){
+                    var userNameFromCookie = ca[index].replace('user=','');
+                    console.log(userNameFromCookie);
+                    break;
+                }
+            }
+            $("span#userNameText").html(' '+userNameFromCookie);
+        })
+
+        <!--------------end of tooltips--------------------------->
+
+        <!--------------start of save 2 csv --------------------------->
+        $("button#getCSVTable").click(() => {
+            alert("will get table")
+        $.ajax(
+            {
+                "url": encodeURI("/getCSVTable")
+            }
+        ).then(
+            function(output) {
+                $("div#csvTable").html(output);
+                $('.datatable').dataTable({
+                    "pagingType": "full_numbers"
+                });
+                $('.datatable').each(function(){
+                    var datatable = $(this);
+                    // SEARCH - Add the placeholder for Search and Turn this into in-line form control
+                    var search_input = datatable.closest('.dataTables_wrapper').find('div[id$=_filter] input');
+                    search_input.attr('placeholder', 'Search');
+                    search_input.addClass('form-control input-sm');
+                    // LENGTH - Inline-Form control
+                    var length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');
+                    length_sel.addClass('form-control input-sm');
+                });
+            }
+        );
+        return false
+        })
+
+
+        <!-------------------------scroll animation--------------------------->
+        $(document).on('click', 'a[href^="#"]', function (event) {
+            event.preventDefault();
+
+            $('html, body').animate({
+                scrollTop: $($.attr(this, 'href')).offset().top
+            }, 500);
+        });
+
+
+    </script>
+
+</body>
+</html>

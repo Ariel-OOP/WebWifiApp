@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Optional theme -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.js"></script>
+
+    <meta charset="utf-8">
+    <title>Wigle WIFI extracter</title>
+    <style>
+
+    </style>
+
+</head>
+<body>
+
+<!-- WebSource: https://github.com/johnwargo/bootstrap-navbar-complete/blob/master/index.html ,I modified it a bit-->
+<!-- Fixed navbar -->
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#about">Wifi Application</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a class="menuLink" href="app2.html#algo1Anchor"><span class="glyphicon glyphicon-signal"></span> Algo 1</a>
+                </li>
+                <li><a class="menuLink" href="#algo2Anchor"><span class="glyphicon glyphicon-map-marker"></span> Algo 2</a>
+                </li>
+                <li><a class="menuLink" href="csvtable.html"><span class="glyphicon glyphicon-play-circle"></span> CSV table</a>
+                </li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a class="menuLink" href="#"><span class="glyphicon glyphicon-user"></span><strong><span id="userNameText"> </span></strong></a>
+                </li>
+                <li><a class="menuLink" href="#loginModal" data-toggle="modal" data-target="#loginModal"><span class="glyphicon glyphicon-lock"></span> Login</a>
+                </li>
+                <li class="active"><a class="menuLink" href="#aboutModal" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-star-empty"></span> About</a>
+                </li>
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</div>
+
+<!----------------------------------------------------------------------->
+<div id="about"></div>
+<br>
+
+
+
+
+<div class="container">
+    <h1 class="page-header">Wifi Application</h1>
+
+
+
+    <br>
+    <div class="alert alert-danger collapse" role="alert" id="filePopup">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 id="filePopupMsg"> </h4>
+    </div>
+
+    <div class="alert alert-success" role="alert">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4> Start off by adding some files. <strong>Don't forget</strong> to click Save 2 CSV. Login to continue work</h4>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <div class="alert alert-info" role="alert">
+        <div class="row">
+            <div class="col-lg-4 col-md-3 col-sm-5">
+                <br>
+                <form action="/sendFiles" method="post" enctype="multipart/form-data">
+                    <div class="input-group input-group-md"  data-toggle="tooltip" title="Only add a CSV combo file!">
+                        <input type="file" name="uploaded_file" class="form-control" accept=".csv">
+                        <span class="input-group-btn">
+                <button class="btn btn-default"  >Upload csv</button>
+              </span>
+                    </div>
+                </form>
+                <br>
+            </div>
+
+            <div class="col-lg-4 col-md-3 col-sm-5">
+                <br>
+                <form action="/sendFiles" method="post" enctype="multipart/form-data">
+                    <div class="input-group input-group-md " data-toggle="tooltip" title="Only add Wigle CSV files!">
+                        <input class="form-control" type="file" id="ctrl" name="uploaded_folder" webkitdirectory="" directory="" multiple="">
+                        <span class="input-group-btn">
+          <button class="btn btn-default" >Upload folder</button>
+        </span>
+                    </div>
+                </form>
+            </div>
+
+
+            <div class="col-lg-2 col-md-2 col-sm-2">
+                <br>
+                <form method="post" enctype="multipart/form-data">
+                    <button id="save2csvbutton" class="btn btn-default  pull-right" type="button" name="button"  data-toggle="tooltip" title="Sends selected files to server" onclick=" window.open('app3.html','_blank')" >Save2 CSV</button>
+
+                </form>
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-sm-2">
+                <br>
+                <form method="post" enctype="multipart/form-data">
+                    <button id="clearDataButton" class="btn btn-default " type="button" name="button">Clear Data</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <a id="algo1Anchor"></a>
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-lg-4 col-md-3 col-sm-4">
+                <h4>Algo 1</h4>
+                Calculates the weighted arithmic mean of the mac
+                entered.
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6">
+                <canvas id="myChart" width="200" height="150"></canvas>
+
+            </div>
+
+
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-3 col-sm-4">
+                <br>
+                <form method="post" enctype="multipart/form-data">
+                    <div class="input-group input-group-lg">
+                        <input id="mac" type="text" class="form-control" placeholder="MAC" value="">
+                        <span class="input-group-btn">
+            <button id="submit" class="btn btn-default" type="button" name="button">Enter</button>
+          </span>
+                    </div><br>
+                </form>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <table class="table" id="wifiTable">
+        <tr class="success"><th>Mac</th><th>Lat</th><th>Lon</th><th>Alt</th></tr>
+    </table>
+
+
+    <a id="algo2Anchor"></a>
+
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-lg-4 col-md-3 col-sm-4">
+                <h4>Algo 2</h4>
+                Calculates the weighted arithmic mean of the mac
+                entered.
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-sm-4">
+                <br>
+                <form method="post" enctype="multipart/form-data">
+                    <div class="input-group input-group-lg">
+                        <input id="mac1Algo2" type="text" class="form-control" placeholder="MAC 1" value="">
+                        <br>
+                        <hr>
+                        <input id="mac2Algo2" type="text" class="form-control" placeholder="MAC 2" value="">
+                        <br>
+                        <hr>
+                        <input id="mac3Algo2" type="text" class="form-control" placeholder="MAC 3" value="">
+                        <span class="input-group-btn">
+          </span>
+                    </div><br>
+                </form>
+            </div>
+
+            <div class="col-lg-2 col-md-3 col-sm-3">
+                <br>
+                <div class="input-group input-group-lg">
+                    <input id="sig1Algo2" type="text" class="form-control" placeholder="Sig1" value="">
+                    <br>
+                    <hr>
+                    <input id="sig2Algo2" type="text" class="form-control" placeholder="Sig2" value="">
+                    <br>
+                    <hr>
+                    <input id="sig3Algo2" type="text" class="form-control" placeholder="Sig3" value="">
+                    <span class="input-group-btn">
+          <button id="submitAlgo2" class="btn btn-default" type="button" name="button">Enter</button>
+        </span>
+                </div><br>
+            </div>
+
+            <div class="col-lg-5 col-md-3 col-sm-6">
+                <canvas id="myChartAlgo2" width="200" height="200"></canvas>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <!-- Algo 2 mac table -->
+    <table class="table" id="algo2Table">
+        <tr class="success"><th>Mac</th><th>Lat</th><th>Lon</th><th>Alt</th></tr>
+    </table>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 style="color:red;"><span class="glyphicon glyphicon-user"></span> Website Created By:</h4>
+                </div>
+                <div class="modal-body">
+                    <h2>Nissan Goldberg</h2>
+                    <img src="https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAmxAAAAJGY2M2VhZWJjLWVhZjUtNDllZi04YzE4LWJhYmVhNjE4ZmExYQ.jpg" class="img-circle" alt="Cinque Terre"  style="width:18%">
+                    <br>
+                    <hr>
+                    <p>Currently a CS student in Ariel University</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Close</button>
+                    <p>Want to view my github <a href="https://github.com/Ariel-OOP/">Github</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end of modal-->
+
+    <!-- login Modal -->
+    <div class="modal fade" id="loginModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 style="color:red;"><span class="glyphicon glyphicon-lock"></span> Login: </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group input-group-md">
+                        <input id="usernameInput" type="text" class="form-control" placeholder="user name" value="">
+                        <span class="input-group-btn">
+                    <button id="submitUsername" class="btn btn-default" type="button" name="button">Log in</button>
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end of modal-->
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <script>
+        /**
+         * Created by nissa on 12/17/2017.
+         */
+        <!-----------counter ,source=https://stackoverflow.com/questions/1535631/static-variables-in-javascript--------------------------->
+        var incrTable = (function () {
+            var i = 1;
+
+            return function () {
+                return i++;
+            }
+        })();
+        <!-----------end of counter --------------------------->
+
+        <!-----------start tooltips nissan--------------------------->
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+
+        });
+        $(window).on('load', function() {
+            var decodedCookie = document.cookie;
+            var ca = decodedCookie.split(';');
+            for (var index = 0; index < ca.length; ++index) {
+                if ((ca[index]).includes("user=")){
+                    var userNameFromCookie = ca[index].replace('user=','');
+                    console.log(userNameFromCookie);
+                    break;
+                }
+            }
+            $("span#userNameText").html(' '+userNameFromCookie);
+        })
+
+        <!--------------end of tooltips--------------------------->
+
+        <!--------------start of save 2 csv --------------------------->
+        $("button#save2csvbutton").click(() => {
+            alert("will save to csv")
+        $.ajax(
+            {
+                "url": encodeURI("/save2csv")
+            }
+        ).then(
+            function(output) {
+                var n = output.includes("true");
+                var userNameOutput = output.split(",");
+                $('div#filePopup').show();
+                if(n==true)
+                    $("h4#filePopupMsg").html("saved "+ userNameOutput[1])
+                else
+                    $("h4#filePopupMsg").html("Can't save no files, try loading some files dimwit.")
+
+            }
+        );
+        return false
+        })
+
+
+        <!--------------start of clear data --------------------------->
+        $("button#clearDataButton").click(() => {
+            alert("will delete")
+        $.ajax(
+            {
+                "url": encodeURI("/clearData")
+            }
+        ).then(
+            function(output) {
+                $('div#filePopup').show();
+
+                $("h4#filePopupMsg").html("deleted files");
+            }
+        );
+        return false
+        })
+
+        <!--start of submit Username -->
+        $("button#submitUsername").click(() => {
+        var userNameInput = $('input#usernameInput').val();
+        $.ajax(
+            {
+                "url": encodeURI("/login?"+userNameInput)
+            }
+        ).then(
+            function(output) {
+                $('div#filePopup').show();
+
+                $("h4#filePopupMsg").html("logged in: "+output);
+                $("span#userNameText").html("  "+output+"");
+
+
+
+            }
+        );
+        return false
+        })
+
+
+        <!--------------start of algo 1 --------------------------->
+
+        $("button#submit").click(() => {
+            var mac  = $("input#mac").val();
+        var name   = $("input#mac").val();
+        alert(mac)
+        alert(name)
+        $.ajax(
+            {
+                "url": encodeURI("/submitAlgo1?" + mac + "," + name)
+            }
+        ).then(
+            function(output) {
+                var splitOutput = output.split(",");
+
+                new Chart(document.getElementById("myChart"),
+                    {"type":"bubble","data":{"datasets":[{"label":"Wifi Points",
+                        "data":[{"x":31,"y":30,"r":5},{"x":parseFloat(splitOutput[0]),"y":parseFloat(splitOutput[1]),"r":10},{"x":30,"y":33,"r":5},{"x":33,"y":36,"r":5}],
+                        "backgroundColor":"rgb(255, 99, 132)"}]}});
+
+
+                <!--------------append wifi point to table--------------------------->
+                var tableColor;
+                var iterationTable= incrTable();
+                if (iterationTable%2==1){
+                    tableColor='danger';
+                }else {
+                    tableColor ='info';
+                }
+                var tr = "<tr class="+tableColor+"><td>"+splitOutput[3]+"</td><td>"
+                    +splitOutput[0]+"</td><td>"+splitOutput[1]+"</td><td>"+splitOutput[2]+"</td></tr>"
+                $('table#wifiTable').append(tr);
+                <!--------------end of appending table--------------------------->
+            }
+        );
+        return false
+        })
+
+        <!--end of Algo 1-->
+
+        <!--start of save 2 csv-->
+
+
+
+
+
+
+        <!--end of save 2 csv-->
+
+        <!-------------------start of algo 2-------------------------->
+
+        $("button#submitAlgo2").click(() => {
+            var mac1Algo2  = $("input#mac1Algo2").val();
+        var mac2Algo2   = $("input#mac2Algo2").val();
+        var mac3Algo2  = $("input#mac3Algo2").val();
+        var sig1Algo2   = $("input#sig1Algo2").val();
+        var sig2Algo2   = $("input#sig2Algo2").val();
+        var sig3Algo2   = $("input#sig3Algo2").val();
+
+
+        $.ajax(
+            {
+                "url": encodeURI("/submitAlgo2?" + mac1Algo2 + "," + mac2Algo2 +","+mac3Algo2 +","+sig1Algo2 +","+sig2Algo2 +","+sig3Algo2)
+            }
+        ).then(
+            function(output) {
+                var splitOutput = output.split(",");
+
+                new Chart(document.getElementById("myChartAlgo2"),
+                    {"type":"bubble","data":{"datasets":[{"label":"Wifi Points",
+                        "data":[{"x":31,"y":30,"r":5},{"x":parseFloat(splitOutput[0]),"y":parseFloat(splitOutput[1]),"r":10},{"x":30,"y":33,"r":5},{"x":33,"y":36,"r":5}],
+                        "backgroundColor":"rgb(255, 99, 132)"}]}});
+
+
+                <!--------------append wifi point to table--------------------------->
+                var tableColor;
+                var iterationTable= incrTable();
+                if (iterationTable%2==1){
+                    tableColor='danger';
+                }else {
+                    tableColor ='info';
+                }
+                var tr = "<tr class="+tableColor+"><td>"+splitOutput[3]+"</td><td>"
+                    +splitOutput[0]+"</td><td>"+splitOutput[1]+"</td><td>"+splitOutput[2]+"</td></tr>"
+                $('table#algo2Table').append(tr);
+                <!--------------end of appending table--------------------------->
+            }
+        );
+        return false
+        })
+
+        <!-------------------end of algo 2-------------------------->
+
+        <!-------------------------scroll animation--------------------------->
+        $(document).on('click', 'a[href^="#"]', function (event) {
+            event.preventDefault();
+
+            $('html, body').animate({
+                scrollTop: $($.attr(this, 'href')).offset().top
+            }, 500);
+        });
+
+
+    </script>
+
+</body>
+</html>

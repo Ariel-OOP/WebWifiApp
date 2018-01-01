@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>App</title>
+
+</head>
+<body>
+<script
+        src="https://code.jquery.com/jquery-2.2.4.min.js"
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+<script src="https://fastcdn.org/Cookies.js/1.2.2/cookies.min.js"></script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg">
+
+<div class="alert alert-info" role="alert">
+    <h4 class="alert-heading">Filters</h4>
+    <hr>
+
+    <!-- Search box Start -->
+    <form >
+        <div class="form-row align-items-center">
+            <div class="col-auto">
+                <label class="mr-sm-2" for="inlineFormCustomSelect">Filter</label>
+                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="FilterBySelection">
+                    <option selected>Choose Filter</option>
+                    <option value="1">Time</option>
+                    <option value="2">Location</option>
+                    <option value="3">Device</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <label class="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">
+                    <input type="checkbox" class="custom-control-input" id="NegateInput1">
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-description">Negate</span>
+                </label>
+            </div>
+
+
+            <div class="col-auto">
+                <label class="mr-sm-2" for="inlineFormCustomSelect"></label>
+                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="FilterByLogic">
+                    <option selected>Choose Logic</option>
+                    <option value="1">And</option>
+                    <option value="2">Or</option>
+                </select>
+            </div>
+
+
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+    <!-- Search box End -->
+
+    <hr>
+    <div class="btn-group">
+        <button type="button" id="btnAddFilter" class="btn btn-primary">+</button>
+        <p>-----</p>
+        <button type="button" id="btnFilterSumbit" class="btn btn-primary">Filter</button>
+    </div>
+
+    <!-- Input boxes -->
+    <hr>
+    <div id="inputDeviceDiv">
+        <input type="text" id="inputDevice" placeholder="device" class="inputFilter">
+    </div>
+
+    <div id="inputTimeDiv">
+        <input type="text" id="inputStartTime" placeholder="start" class="inputFilter">
+        <input type="text" id="inputEndTime" placeholder="end" class="inputFilter">
+    </div>
+
+    <div id="inputLocationeDiv">
+        <input type="text" id="inputStartLat" placeholder="start lat" class="inputFilter">
+        <input type="text" id="inputStartLon" placeholder="start lon" class="inputFilter">
+        <hr>
+        <input type="text" id="inputEndLat" placeholder="end lat" class="inputFilter">
+        <input type="text" id="inputEndLon" placeholder="end lon" class="inputFilter">
+    </div>
+
+
+
+    <!-- Selection filter 2 -->
+
+
+
+    <div id="inputFilter2">
+        <hr>
+        <h2>Filter 2</h2>
+        <hr>
+        <form >
+            <div class="form-row align-items-center">
+                <div class="col-auto">
+                    <label class="mr-sm-2" for="inlineFormCustomSelect">Filter</label>
+                    <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="FilterBySelection2">
+                        <option selected>Choose Filter</option>
+                        <option value="1">Time</option>
+                        <option value="2">Location</option>
+                        <option value="3">Device</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <label class="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">
+                        <input type="checkbox" class="custom-control-input" id="NegateInput2">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Negate</span>
+                    </label>
+                </div>
+            </div>
+        </form >
+
+        <!-- Input boxes filter 2 -->
+
+        <hr>
+        <div id="inputDeviceDiv2">
+            <input type="text" id="inputDevice2" placeholder="device 2" class="inputFilter2">
+        </div>
+
+        <div id="inputTimeDiv2">
+            <input type="text" id="inputStartTime2" placeholder="start 2" class="inputFilter2">
+            <input type="text" id="inputEndTime2" placeholder="end 2" class="inputFilter2">
+        </div>
+
+        <div id="inputLocationeDiv2">
+            <input type="text" id="inputStartLat2" placeholder="start lat 2" class="inputFilter2">
+            <input type="text" id="inputStartLon2" placeholder="start lon 2" class="inputFilter2">
+            <hr>
+            <input type="text" id="inputEndLat2" placeholder="end lat 2" class="inputFilter2">
+            <input type="text" id="inputEndLon2" placeholder="end lon 2" class="inputFilter2">
+        </div>
+    </div>
+
+
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+
+    <!-- On load hide -->
+    $( document ).ready(function() {
+        $("div#inputTimeDiv").hide();
+        $("div#inputLocationeDiv").hide();
+        $("div#inputDeviceDiv").hide();
+        $("select#FilterByLogic").hide();
+        $("div#inputFilter2").hide();
+        $("div#inputTimeDiv2").hide();
+        $("div#inputLocationeDiv2").hide();
+        $("div#inputDeviceDiv2").hide();
+        $("select#FilterByLogic2").hide();
+    });
+
+    <!-- hide and show appropriate Input boxes filter 1 -->
+    $("#FilterBySelection").click(function(){
+        var selText = $(this).text();
+        $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+
+
+        if ($("#FilterBySelection :selected").text().includes('Device')){
+            $("div#inputDeviceDiv").show();
+            $("select#FilterByLogic").show();
+            $("div#inputTimeDiv").hide();
+            $("div#inputLocationeDiv").hide();
+        }else if ($("#FilterBySelection :selected").text().includes('Location')){
+            $("div#inputLocationeDiv").show();
+            $("select#FilterByLogic").show();
+            $("div#inputTimeDiv").hide();
+            $("div#inputDeviceDiv").hide();
+        }else if ($("#FilterBySelection :selected").text().includes('Time')) {
+            $("div#inputTimeDiv").show();
+            $("select#FilterByLogic").show();
+            $("div#inputLocationeDiv").hide();
+            $("div#inputDeviceDiv").hide();
+        }
+    });
+
+    <!-- hide and show appropriate Input boxes filter 2 -->
+
+    $("#FilterBySelection2").click(function(){
+        var selText = $(this).text();
+        $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+
+
+        if ($("#FilterBySelection2 :selected").text().includes('Device')){
+            $("div#inputDeviceDiv2").show();
+            $("select#FilterByLogic2").show();
+            $("div#inputTimeDiv2").hide();
+            $("div#inputLocationeDiv2").hide();
+        }else if ($("#FilterBySelection2 :selected").text().includes('Location')){
+            $("div#inputLocationeDiv2").show();
+            $("select#FilterByLogic2").show();
+            $("div#inputTimeDiv2").hide();
+            $("div#inputDeviceDiv2").hide();
+        }else if ($("#FilterBySelection2 :selected").text().includes('Time')) {
+            $("div#inputTimeDiv2").show();
+            $("select#FilterByLogic2").show();
+            $("div#inputLocationeDiv2").hide();
+            $("div#inputDeviceDiv2").hide();
+        }
+    });
+
+    <!-- Input boxes -->
+
+    $("#btnAddFilter").click(function(){
+        $("div#inputTimeDiv").hide();
+        $("div#inputLocationeDiv").hide();
+        $("div#inputDeviceDiv").hide();
+        $("select#FilterByLogic").hide();
+    });
+
+    <!-- Submit Filter -->
+
+    $("#btnFilterSumbit").click(function(){
+        <!-- Submit Device Filter -->
+        sessionStorage.clear();
+        sessionStorage.setItem('Logic', $("#FilterByLogic :selected").text() );
+        Cookies.set('filter1', $("#FilterBySelection :selected").text() , { expires: 600 });
+        Cookies.set('filter2', $("#FilterBySelection2 :selected").text() , { expires: 600 });
+        Cookies.set('Logic', $("#FilterByLogic :selected").text() , { expires: 600 });
+        Cookies.set('negate1', $("#NegateInput1").is(":checked") , { expires: 600 });
+
+        if ($("#FilterBySelection :selected").text().includes('Device')){
+            if ($("#inputDevice").val().length === 0){
+                alert("you forgot to input");
+                return;
+            }else{
+                sessionStorage.setItem('inputDevice1', $("#inputDevice").val() );
+                Cookies.set('input1', $("#inputDevice").val() , { expires: 600 });
+            }
+            <!-- Submit Location Filter -->
+
+        }else if ($("#FilterBySelection :selected").text().includes('Location')){
+            Cookies.set('input1', $("#inputStartLat").val() +"&"+ $("#inputStartLon").val()+"&"+ $("#inputEndLat").val()+"&"+ $("#inputEndLon").val(), { expires: 600 });
+
+        }<!-- Submit Time Filter -->
+        else if ($("#FilterBySelection :selected").text().includes('Time')) {
+            sessionStorage.setItem('inputStartTime1', $("#inputStartTime").val() );
+            sessionStorage.setItem('inputEndTime1', $("#inputEndTime").val() );
+            Cookies.set('input1', $("#inputStartTime").val() +"&"+ $("#inputEndTime").val() , { expires: 600 });
+        }
+        if (!$("#FilterByLogic :selected").text().includes('Choose Logic')){
+
+            <!-- if choose second filter -->
+            Cookies.set('negate2', $("#NegateInput2").is(":checked") , { expires: 600 });
+            if ($("#FilterBySelection2 :selected").text().includes('Device')){
+                if ($("#inputDevice2").val().length === 0){
+                    alert("you forgot to input");
+                    return;
+                }else{
+                    sessionStorage.setItem('inputDevice1', $("#inputDevice2").val() );
+                    Cookies.set('input2', $("#inputDevice2").val() , { expires: 600 });
+                }
+                <!-- Submit Location Filter -->
+
+            }else if ($("#FilterBySelection2 :selected").text().includes('Location')){
+                Cookies.set('input2', $("#inputStartLat2").val() +"&"+ $("#inputStartLon2").val()+"&"+ $("#inputEndLat2").val()+"&"+ $("#inputEndLon2").val(), { expires: 600 });
+
+            }<!-- Submit Time Filter -->
+            else if ($("#FilterBySelection2 :selected").text().includes('Time')) {
+                sessionStorage.setItem('inputStartTime1', $("#inputStartTime").val() );
+                sessionStorage.setItem('inputEndTime1', $("#inputEndTime").val() );
+                Cookies.set('input2', $("#inputStartTime2").val() +"&"+ $("#inputEndTime2").val() , { expires: 600 });
+            }
+        }
+        else if ($("#FilterByLogic :selected").text().includes('Choose Logic')){
+            Cookies.set('input2', '' , { expires: 600 });
+            Cookies.set('filter2', '' , { expires: 600 });
+            Cookies.set('logic', '-' , { expires: 600 });
+
+        }
+        $.ajax(
+            {
+                "url": encodeURI("/filter")
+            }
+        ).then(
+            function(output) {
+
+            }
+        );
+
+
+    });
+
+    <!-- input Filter 2 -->
+    $("#FilterByLogic").click(function(){
+        var selText = $(this).text();
+        $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+
+        if ($("#FilterByLogic :selected").text().includes('And')){
+            $("div#inputFilter2").show();
+
+        }else if ($("#FilterByLogic :selected").text().includes('Or')){
+            $("div#inputFilter2").show();
+
+        }else if ($("#FilterByLogic :selected").text().includes('Choose Logic')) {
+            $("div#inputFilter2").hide();
+        }
+    });
+</script>
+</html>
