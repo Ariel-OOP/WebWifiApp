@@ -50,10 +50,18 @@ public class Main{
         // create the upload directory if it doesn't exist
         new File("UserFiles/output").mkdir();
         new File("UserFiles/comboFolder").mkdir();
+        new File("UserFiles/filteredOutput").mkdir();
+
 
         get("/filter", (req, res) ->{
             Predicate finalPredicate = WebsiteFilter.filter(req,res);
             System.out.println("predicate "+finalPredicate.test(processedFile.get(1)) );
+            new File("UserFiles/filteredOutput/"+req.cookie("user")).mkdir();
+
+            HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csvWithPredicate("UserFiles/upload/"+req.cookie("user")
+                    ,"UserFiles/filteredOutput/"+req.cookie("user"),finalPredicate);
+
+            usersHashRouters.put(req.cookie("user"),currnetHashRouter);
             return "filtered";
         });
 
@@ -96,8 +104,8 @@ public class Main{
 
             System.out.println("============================================");
             File file = new File("UserFiles/upload/"+req.cookie("user"));
-            File outputDir = new File("UserFiles/output/"+req.cookie("user"));
-            outputDir.mkdir(); // create the upload directory if it doesn't exist
+            new File("UserFiles/output/"+req.cookie("user")).mkdir();
+            // create the upload directory if it doesn't exist
 
             if(file.list().length>0){
                 System.out.println("saving to csv output");
@@ -117,8 +125,9 @@ public class Main{
                 processedFile =outputCSVWriter.sortAndMergeFiles();
 
                 //==========================================added 12-31-17 - end
-
+                System.out.println(req.cookie("user"));
                 return "true,"+req.cookie("user");
+//                return "true,nis";
             }else{
                 System.out.println("cannot save to output csv");
                 System.out.println("Directory is empty!");

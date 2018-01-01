@@ -37,7 +37,7 @@ public class MainConsole {
 
         OutputCSVWriter outputCSVWriter = new OutputCSVWriter(selectedFiles);
         processedFile.addAll(outputCSVWriter.sortAndMergeFiles());
-        OutputCSVWriter.ExportToCSV(processedFile,"testOutputCSV.csv");
+        OutputCSVWriter.ExportToCSV(processedFile,"testOutputCSV.csv",null);
 
 //
 //        for() {

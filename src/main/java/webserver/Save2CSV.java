@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Created by Nissan on 12/15/2017.
@@ -51,7 +52,50 @@ public class Save2CSV{
 
         processedFile =  outputCSVWriter.sortAndMergeFiles();
 
-        outputCSVWriter.ExportToCSV(processedFile,outputPath+"/OutputCSV.csv");
+        outputCSVWriter.ExportToCSV(processedFile,outputPath+"/OutputCSV.csv",null);
+
+        routersOfAllFiles = outputCSVWriter.getAllRoutersOfTheFiles();
+
+        csvToHtml( processedFile,outputPath+"/OutputCSV.txt");
+        return routersOfAllFiles;
+
+    }
+
+    public static HashRouters<String,WIFISample> save2csvWithPredicate(String uploadPath, String outputPath, Predicate predicate){
+        System.out.println("==================saving to csv=============");
+        System.out.println("============================================");
+
+        File selectedFolder=null;
+        File selectedFile = null;
+        List<File> selectedFiles=new ArrayList<>();
+        List<WifiPointsTimePlace> processedFile=new ArrayList<>();
+        HashRouters<String,WIFISample> routersOfAllFiles;
+
+        if(selectedFiles==null && selectedFolder==null){
+            //TODO
+        }
+
+        File dir = new File(uploadPath);
+        for (File file : dir.listFiles()) {
+            //Incorrect file type-reject
+            if (!(file.getName().toLowerCase().endsWith(".csv"))) {
+                System.out.println(file.getName() + " is an incorrect file type in the folder");
+                System.out.println("the file was not added to the csv file error 404");
+                continue;
+            }else{ //add absolute path
+                selectedFiles.add(file.getAbsoluteFile());
+            }
+        }
+        for(File file : selectedFiles){
+            System.out.println(file.getAbsolutePath());
+        }
+
+
+        OutputCSVWriter outputCSVWriter = new OutputCSVWriter(selectedFiles);
+
+        processedFile =  outputCSVWriter.sortAndMergeFiles();
+
+        outputCSVWriter.ExportToCSV(processedFile,outputPath+"/OutputCSV.csv",predicate);
 
         routersOfAllFiles = outputCSVWriter.getAllRoutersOfTheFiles();
 
