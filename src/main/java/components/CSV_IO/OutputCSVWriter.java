@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class OutputCSVWriter {
 
@@ -66,7 +67,7 @@ public class OutputCSVWriter {
 		return processedFile;
 	}
 
-	public static<T extends Object> void ExportToCSV(List<T> fileAfterSortintAndMerging,String outputPath) {
+	public static<T extends Object> void ExportToCSV(List<T> fileAfterSortintAndMerging, String outputPath, Predicate<WifiPointsTimePlace> predicate) {
 
 		//Deletes file if it exists
 		File fileToDelete = new File(outputPath+".csv");
@@ -92,7 +93,10 @@ public class OutputCSVWriter {
 
 			for (T line : fileAfterSortintAndMerging) {
 				if (line instanceof WifiPointsTimePlace) {
-					csvFilePrinter.printRecord(((WifiPointsTimePlace)line).getWifiPoints());
+					if (predicate==null)
+						csvFilePrinter.printRecord(((WifiPointsTimePlace)line).getWifiPoints());
+					else if(predicate.test((WifiPointsTimePlace)line)==true)
+						csvFilePrinter.printRecord(((WifiPointsTimePlace)line).getWifiPoints());
 				}else if(line instanceof WIFIWeight){
 					csvFilePrinter.printRecord(((WIFIWeight)line).propertiesOfWifiWeight());
 				}
