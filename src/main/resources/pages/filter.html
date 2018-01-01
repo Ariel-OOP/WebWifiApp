@@ -67,6 +67,8 @@
         <button type="button" id="btnAddFilter" class="btn btn-primary">+</button>
         <p>-----</p>
         <button type="button" id="btnFilterSumbit" class="btn btn-primary">Filter</button>
+        <p>-----</p>
+        <button type="button" id="btnSaveFilter" class="btn btn-primary">Save Filter</button>
     </div>
 
     <!-- Input boxes -->
@@ -283,6 +285,80 @@
         $.ajax(
             {
                 "url": encodeURI("/filter")
+            }
+        ).then(
+            function(output) {
+
+            }
+        );
+
+
+    });
+
+
+    <!-- Save Filter -->
+
+    $("#btnSaveFilter").click(function(){
+        <!-- Submit Device Filter -->
+        sessionStorage.clear();
+        sessionStorage.setItem('Logic', $("#FilterByLogic :selected").text() );
+        Cookies.set('filter1', $("#FilterBySelection :selected").text() , { expires: 600 });
+        Cookies.set('filter2', $("#FilterBySelection2 :selected").text() , { expires: 600 });
+        Cookies.set('Logic', $("#FilterByLogic :selected").text() , { expires: 600 });
+        Cookies.set('negate1', $("#NegateInput1").is(":checked") , { expires: 600 });
+
+        if ($("#FilterBySelection :selected").text().includes('Device')){
+            if ($("#inputDevice").val().length === 0){
+                alert("you forgot to input");
+                return;
+            }else{
+                sessionStorage.setItem('inputDevice1', $("#inputDevice").val() );
+                Cookies.set('input1', $("#inputDevice").val() , { expires: 600 });
+            }
+            <!-- Submit Location Filter -->
+
+        }else if ($("#FilterBySelection :selected").text().includes('Location')){
+            Cookies.set('input1', $("#inputStartLat").val() +"&"+ $("#inputStartLon").val()+"&"+ $("#inputEndLat").val()+"&"+ $("#inputEndLon").val(), { expires: 600 });
+
+        }<!-- Submit Time Filter -->
+        else if ($("#FilterBySelection :selected").text().includes('Time')) {
+            sessionStorage.setItem('inputStartTime1', $("#inputStartTime").val() );
+            sessionStorage.setItem('inputEndTime1', $("#inputEndTime").val() );
+            Cookies.set('input1', $("#inputStartTime").val() +"&"+ $("#inputEndTime").val() , { expires: 600 });
+        }
+        if (!$("#FilterByLogic :selected").text().includes('Choose Logic')){
+
+            <!-- if choose second filter -->
+            Cookies.set('negate2', $("#NegateInput2").is(":checked") , { expires: 600 });
+            if ($("#FilterBySelection2 :selected").text().includes('Device')){
+                if ($("#inputDevice2").val().length === 0){
+                    alert("you forgot to input");
+                    return;
+                }else{
+                    sessionStorage.setItem('inputDevice1', $("#inputDevice2").val() );
+                    Cookies.set('input2', $("#inputDevice2").val() , { expires: 600 });
+                }
+                <!-- Submit Location Filter -->
+
+            }else if ($("#FilterBySelection2 :selected").text().includes('Location')){
+                Cookies.set('input2', $("#inputStartLat2").val() +"&"+ $("#inputStartLon2").val()+"&"+ $("#inputEndLat2").val()+"&"+ $("#inputEndLon2").val(), { expires: 600 });
+
+            }<!-- Submit Time Filter -->
+            else if ($("#FilterBySelection2 :selected").text().includes('Time')) {
+                sessionStorage.setItem('inputStartTime1', $("#inputStartTime").val() );
+                sessionStorage.setItem('inputEndTime1', $("#inputEndTime").val() );
+                Cookies.set('input2', $("#inputStartTime2").val() +"&"+ $("#inputEndTime2").val() , { expires: 600 });
+            }
+        }
+        else if ($("#FilterByLogic :selected").text().includes('Choose Logic')){
+            Cookies.set('input2', '' , { expires: 600 });
+            Cookies.set('filter2', '' , { expires: 600 });
+            Cookies.set('logic', '-' , { expires: 600 });
+
+        }
+        $.ajax(
+            {
+                "url": encodeURI("/saveFilter")
             }
         ).then(
             function(output) {

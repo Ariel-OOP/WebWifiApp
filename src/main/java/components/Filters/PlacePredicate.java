@@ -2,6 +2,7 @@ package components.Filters;
 
 import components.Attributes.WifiPointsTimePlace;
 
+import java.io.Serializable;
 import java.util.function.Predicate;
 
 public class PlacePredicate implements Predicate<WifiPointsTimePlace> {
