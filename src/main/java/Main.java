@@ -11,9 +11,11 @@ import components.CSV_IO.OutputCSVWriter;
 import components.Filters.DevicePredicate;
 import components.Filters.PlacePredicate;
 import components.Filters.TimePredicate;
+import components.Filters.WebsiteFilter;
 import spark.Request;
 import spark.Response;
 import webserver.Save2CSV;
+import webserver.SaveFilter;
 
 import javax.servlet.MultipartConfigElement;
 import java.io.*;
@@ -26,7 +28,7 @@ import java.util.function.Predicate;
 
 import static spark.Spark.*;
 
-public class Main {
+public class Main{
     static String[] userPath;
     static int fileNum=0;
     static HashRouters<String,WIFISample> hashRouters;
@@ -43,76 +45,25 @@ public class Main {
 
     public static void routeCSV(){
         staticFiles.location("/pages");
-
-        File uploadDir = new File("upload");
-        uploadDir.mkdir(); // create the upload directory if it doesn't exist
-
-        File createOutputDir = new File("output");
-        createOutputDir.mkdir(); // create the upload directory if it doesn't exist
+        new File("UserFiles").mkdir();
+        new File("UserFiles/upload").mkdir();
+        // create the upload directory if it doesn't exist
+        new File("UserFiles/output").mkdir();
+        new File("UserFiles/comboFolder").mkdir();
 
         get("/filter", (req, res) ->{
-            String userName = req.queryString();
-            System.out.println("Logic 1:"+req.cookie("Logic"));
-            System.out.println("filter 1:"+req.cookie("filter1"));
-            String filter1 = req.cookie("filter1");
-            System.out.println("filter "+filter1);
-            String[] inputsFilter1 = req.cookie("input1").split("&");
-            System.out.println(inputsFilter1[0]);
-            Predicate<WifiPointsTimePlace> predicate1 = null; //mean time
-            Predicate<WifiPointsTimePlace> predicate2 = null; //mean time
-            Predicate<WifiPointsTimePlace> finalPredicate = null; //mean time
-
-            switch (filter1){
-                case "Location":
-                    predicate1 = new PlacePredicate(Double.parseDouble(inputsFilter1[0]),Double.parseDouble(inputsFilter1[1]),
-                            Double.parseDouble(inputsFilter1[2]),Double.parseDouble(inputsFilter1[3]) );
-                    break;
-                case "Device":
-                    predicate1 = new DevicePredicate(inputsFilter1[0]);
-                    break;
-                case "Time":
-                    predicate1 = new TimePredicate(inputsFilter1[0],inputsFilter1[1]);
-                    break;
-            }
-            if (req.cookie("negate1").equals("true"))
-                predicate1 = predicate1.negate();
-            // if there is logic
-            if (req.cookie("Logic").equals("And") || req.cookie("Logic").equals("Or")) {
-                String filter2 = req.cookie("filter2");
-                String[] inputsFilter2 = req.cookie("input2").split("&");
-
-                switch (filter2) {
-                    case "Location":
-                        predicate2 = new PlacePredicate(Double.parseDouble(inputsFilter2[0]), Double.parseDouble(inputsFilter2[1]),
-                                Double.parseDouble(inputsFilter2[2]), Double.parseDouble(inputsFilter2[3]));
-                        break;
-                    case "Device":
-                        predicate2 = new DevicePredicate(inputsFilter2[0]);
-                        break;
-                    case "Time":
-                        predicate2 = new TimePredicate(inputsFilter2[0], inputsFilter2[1]);
-                        break;
-                }
-                if (req.cookie("negate2").equals("true"))
-                    predicate2 = predicate2.negate();
-
-                String logicSymbol = req.cookie("Logic");
-                if (logicSymbol.equals("And")){
-                    finalPredicate = predicate1.and(predicate2);
-                }else if (logicSymbol.equals("Or")){
-                    finalPredicate = predicate1.or(predicate2);
-                }
-            }
-            if (predicate2==null)
-                finalPredicate = predicate1;
+            Predicate finalPredicate = WebsiteFilter.filter(req,res);
             System.out.println("predicate "+finalPredicate.test(processedFile.get(1)) );
-            System.out.println("predicate "+finalPredicate.test(processedFile.get(3)) );
             return "filtered";
+        });
 
+        get("/saveFilter", (req, res) ->{
+            System.out.println("starting saved filter");
+            return SaveFilter.saveFilter(req, res);
         });
 
         get("/clearData", (req, res) ->{
-            File filesToDelete = new File("upload/"+req.cookie("user"));
+            File filesToDelete = new File("UserFiles/upload/"+req.cookie("user"));
             //websource:  https://stackoverflow.com/questions/20281835/how-to-delete-a-folder-with-files-using-java
             String[]entries = filesToDelete.list();
             for(String s: entries){
@@ -144,19 +95,19 @@ public class Main {
         get("/save2csv", (req, res) ->{
 
             System.out.println("============================================");
-            File file = new File("upload/"+req.cookie("user"));
-            File outputDir = new File("output/"+req.cookie("user"));
+            File file = new File("UserFiles/upload/"+req.cookie("user"));
+            File outputDir = new File("UserFiles/output/"+req.cookie("user"));
             outputDir.mkdir(); // create the upload directory if it doesn't exist
 
             if(file.list().length>0){
                 System.out.println("saving to csv output");
-                HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csv("upload/"+req.cookie("user"),"output/"+req.cookie("user"));
+                HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csv("UserFiles/upload/"+req.cookie("user"),"UserFiles/output/"+req.cookie("user"));
                 usersHashRouters.put(req.cookie("user"),currnetHashRouter);
 //                hashRouters = Save2CSV.save2csv("upload/"+req.cookie("user"),"output/"+req.cookie("user"));
 
                 //==========================================added 12-31-17
                 List<File> selectedFiles= new ArrayList<>();
-                File uploads = new File("upload\\"+req.cookie("user"));
+                File uploads = new File("UserFiles/upload/"+req.cookie("user"));
                 for(File file2 : uploads.listFiles()){
                     selectedFiles.add(file2);
                 }
@@ -222,7 +173,7 @@ public class Main {
             userInput.add(new WIFIWeight(queries[2],0,0,0,Integer.parseInt(queries[5]),0));
 
             List<File> selectedFiles= new ArrayList<>();
-            File uploads = new File("upload");
+            File uploads = new File("UserFiles/upload");
             for(File file : uploads.listFiles()){
                 selectedFiles.add(file);
             }
@@ -271,7 +222,7 @@ public class Main {
 
         post("/sendFiles", (Request req, Response res) -> {
             //make sub folder for user
-            File userUploadDir = new File("upload/"+req.cookie("user"));
+            File userUploadDir = new File("UserFiles/upload/"+req.cookie("user"));
             userUploadDir.mkdir(); // create the upload directory if it doesn't exist
 
 //            Path tempFile = Files.createTempFile(uploadDir.toPath(), "submittedFile", ".csv");
@@ -284,12 +235,57 @@ public class Main {
             for(String fileparser: splits){
                 if (fileparser.contains(".csv")){
                     int index =fileparser.indexOf("WigleWifi-");
-//                    System.out.println(fileparser.substring(index) );
+//                    System.out.println(fileparser );
 //                    PrintWriter printWriter = new PrintWriter("upload/uploadFile"+fileNum+".csv");
 
 
                     String fileToOutput = fileparser.substring(index);
-                    try(PrintWriter writeToFile = new PrintWriter(new BufferedWriter(new FileWriter("upload/"+req.cookie("user")+"/"+fileNum+".csv", true)))) {
+                    try(PrintWriter writeToFile = new PrintWriter(new BufferedWriter(new FileWriter("UserFiles/upload/"+req.cookie("user")+"/"+fileNum+".csv", true)))) {
+                        writeToFile.println(fileToOutput);
+                    }catch (IOException e) {
+                        System.err.println(e);
+                    }
+
+
+                    fileNum++;
+//                    printWriter.println(fileparser.substring(index));
+//                    System.out.println("\n\n\n\n\n\nend of file:"+fileNum+"\n\n\n\n\n\n\n\n\n\n");
+                }
+            }
+            System.out.println(fileNum + " is total num of uploading files");
+
+            //======================end of my code=========================
+//            try (InputStream input = req.raw().getPart("uploaded_file").getInputStream()) { // getPart needs to use same "name" as input field in form
+//                Files.copy(input, tempFile, StandardCopyOption.REPLACE_EXISTING);
+//
+//            }
+            res.status(200);
+            res.redirect("app2.html");
+            return req.cookie("user")+"";
+//            return "sent files";
+        });
+
+        post("/sendComboFile", (Request req, Response res) -> {
+            //make sub folder for user
+            File userUploadDir = new File("UserFiles/comboFolder/"+req.cookie("user"));
+            userUploadDir.mkdir(); // create the upload directory if it doesn't exist
+
+//            Path tempFile = Files.createTempFile(uploadDir.toPath(), "submittedFile", ".csv");
+            System.out.println("uploading files");
+
+            req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
+
+            String[] splits = req.body().split("------WebKitFormBoundary");
+
+            for(String fileparser: splits){
+                if (fileparser.contains(".csv")){
+                    int index =fileparser.indexOf("Time,ID,Lat,Lon,Alt,");
+//                    System.out.println(fileparser );
+//                    PrintWriter printWriter = new PrintWriter("upload/uploadFile"+fileNum+".csv");
+
+
+                    String fileToOutput = fileparser.substring(index);
+                    try(PrintWriter writeToFile = new PrintWriter(new BufferedWriter(new FileWriter("UserFiles/comboFolder/"+req.cookie("user")+"/"+fileNum+".csv", true)))) {
                         writeToFile.println(fileToOutput);
                     }catch (IOException e) {
                         System.err.println(e);
