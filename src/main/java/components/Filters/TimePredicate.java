@@ -27,18 +27,27 @@ public class TimePredicate implements Predicate<WifiPointsTimePlace> {
 
             System.out.println(timeFrom);
             System.out.println(formatter.format(timeFrom));
-
+            this.timeFrom = timeFrom;
+            this.timeTo = timeTo;
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        this.timeFrom = timeFrom;
-        this.timeTo = timeTo;
+
     }
 
     @Override
     public boolean test(WifiPointsTimePlace wifiPointsTimePlace) {
-        Date lineDate = new Date(wifiPointsTimePlace.getFirstSeen());
-
+        Date lineDate=null;
+        try {
+            lineDate = formatter.parse(wifiPointsTimePlace.getFirstSeen());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+//        System.out.println("line date"+lineDate);
+//        System.out.println("test date from "+timeFrom);
+//        System.out.println("test date to "+timeTo);
+//        System.out.println("check date");
+//        System.out.println(lineDate.after(this.timeFrom) && lineDate.before(this.timeTo));
         return lineDate.after(this.timeFrom) && lineDate.before(this.timeTo);
     }
 }
