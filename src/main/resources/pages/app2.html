@@ -122,7 +122,7 @@
             <div class="col-lg-2 col-md-2 col-sm-2">
                 <br>
                 <form method="post" enctype="multipart/form-data">
-                    <button id="save2csvbutton" class="btn btn-default  pull-right" type="button" name="button"  data-toggle="tooltip" title="Sends selected files to server" onclick=" window.open('app3.html','_blank')" >Save2 CSV</button>
+                    <button id="save2csvbutton" class="btn btn-default  pull-right" type="button" name="button"  data-toggle="tooltip" title="Sends selected files to server"  >Save2 CSV</button>
 
                 </form>
             </div>
@@ -137,6 +137,27 @@
         </div>
     </div>
 
+
+    <div class="alert alert-success" role="alert">
+        <div class="row">
+            <div class="col-lg-6 col-md-3 col-sm-5">
+                <h3>Number of Lines:</h3>
+            </div>
+
+            <div class="col-lg-6 col-md-3 col-sm-5">
+                <h3 id="NumberOfLines">None...</h3>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-md-3 col-sm-5">
+                    <h3>Number of MACS:</h3>
+                </div>
+            <div class="col-lg-6 col-md-3 col-sm-5">
+                <h3 id="NumberOfMACS">None...</h3>
+            </div>
+            </div>
+        </div>
+    </div>
 
 
     <a id="algo1Anchor"></a>
@@ -339,8 +360,14 @@
                 var n = output.includes("true");
                 var userNameOutput = output.split(",");
                 $('div#filePopup').show();
-                if(n==true)
-                    $("h4#filePopupMsg").html("saved "+ userNameOutput[1])
+                if(n==true){
+                    $("h4#filePopupMsg").html("saved "+ userNameOutput[1]);
+                    $("h3#NumberOfLines").html(""+ userNameOutput[2]);
+                    console.log("NumberOfLines:"+userNameOutput[2]);
+                    $("h3#NumberOfMACS").html(""+ userNameOutput[3]);
+                    console.log("NumberOfMACS:"+userNameOutput[3]);
+
+                }
                 else
                     $("h4#filePopupMsg").html("Can't save no files, try loading some files dimwit.")
 
@@ -360,7 +387,8 @@
         ).then(
             function(output) {
                 $('div#filePopup').show();
-
+                $("h3#NumberOfLines").html("0");
+                $("h3#NumberOfMACS").html("0");
                 $("h4#filePopupMsg").html("deleted files");
             }
         );

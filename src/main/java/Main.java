@@ -7,6 +7,7 @@ import components.Attributes.HashRouters;
 import components.Attributes.WIFISample;
 import components.Attributes.WIFIWeight;
 import components.Attributes.WifiPointsTimePlace;
+import components.CSV_IO.CoboCSVReader;
 import components.CSV_IO.OutputCSVWriter;
 import components.Filters.DevicePredicate;
 import components.Filters.PlacePredicate;
@@ -19,8 +20,7 @@ import webserver.SaveFilter;
 
 import javax.servlet.MultipartConfigElement;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -34,13 +34,50 @@ public class Main{
     static HashRouters<String,WIFISample> hashRouters;
     static Hashtable<String,HashRouters> usersHashRouters;
     static List<WifiPointsTimePlace> processedFile;
+    static Hashtable<String,List<WifiPointsTimePlace>> usersProcessedFile;
     //TODO usersProccessedFiles
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         port(getHerokuAssignedPort());
         routeCSV();
         System.out.println("\nServer up!!! go to   http://localhost:4567/   for web app");
         usersHashRouters = new Hashtable<String,HashRouters>();
+
+
+
+
+//        //===========================Watch Service============================================
+//        WatchService watchService
+//                = null;
+//        try {
+//            watchService = FileSystems.getDefault().newWatchService();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        Path path = Paths.get("UserFiles");
+//
+//        try {
+//            path.register(
+//                    watchService,
+//                    StandardWatchEventKinds.ENTRY_CREATE,
+//                    StandardWatchEventKinds.ENTRY_DELETE,
+//                    StandardWatchEventKinds.ENTRY_MODIFY);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        WatchKey key;
+//        while ((key = watchService.take()) != null) {
+//            for (WatchEvent<?> event : key.pollEvents()) {
+//                System.out.println(
+//                        "Event kind:" + event.kind()
+//                                + ". File affected: " + event.context() + ".");
+//            }
+//            key.reset();
+//        }
+//        //===========================End of Watch Service============================================
+
     }
 
     public static void routeCSV(){
@@ -51,11 +88,12 @@ public class Main{
         new File("UserFiles/output").mkdir();
         new File("UserFiles/comboFolder").mkdir();
         new File("UserFiles/filteredOutput").mkdir();
-
+        usersProcessedFile = new Hashtable<>();
+        processedFile = new ArrayList<>();
 
         get("/filter", (req, res) ->{
             Predicate finalPredicate = WebsiteFilter.filter(req,res);
-            System.out.println("predicate "+finalPredicate.test(processedFile.get(1)) );
+            System.out.println("predicate "+finalPredicate.test(usersProcessedFile.get(req.cookie("user")).get(1)) );
             new File("UserFiles/filteredOutput/"+req.cookie("user")).mkdir();
 
             HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csvWithPredicate("UserFiles/upload/"+req.cookie("user")
@@ -79,8 +117,21 @@ public class Main{
                 System.out.println("deleted "+currentFile.getName());
                 currentFile.delete();
             }
+
+            filesToDelete = new File("UserFiles/comboFolder/"+req.cookie("user"));
+            entries = filesToDelete.list();
+            for(String s: entries){
+                File currentFile = new File(filesToDelete.getPath(),s);
+                System.out.println("deleted "+currentFile.getName());
+                currentFile.delete();
+            }
+
             //TODO check is this is the solution
-            usersHashRouters.remove(req.cookie("user"));
+//            usersHashRouters.remove(req.cookie("user"));
+//            usersProcessedFile.remove(req.cookie("user"));
+            usersHashRouters.replace(req.cookie("user"),new HashRouters());
+            usersProcessedFile.replace(req.cookie("user"),new ArrayList<>());
+            processedFile = new ArrayList<>();
             return "deleted uploaded files";
 
 
@@ -107,6 +158,33 @@ public class Main{
             new File("UserFiles/output/"+req.cookie("user")).mkdir();
             // create the upload directory if it doesn't exist
 
+
+            //===================================================
+
+            File comboFiles = new File("UserFiles/comboFolder/"+req.cookie("user"));
+
+            System.out.println(comboFiles.exists());
+            if (comboFiles.exists()) {
+                if (comboFiles.list().length > 0) {
+                    for (File fileInCombo : comboFiles.listFiles()) {
+                        try {
+                            System.out.println(fileInCombo.getPath() + "");
+                            if (usersHashRouters.get(req.cookie("user")) == null)
+                                usersHashRouters.put(req.cookie("user"),new HashRouters());
+                            processedFile.addAll(CoboCSVReader.readCsvFile(fileInCombo.getPath() + "", usersHashRouters.get(req.cookie("user"))));
+                            usersProcessedFile.put(req.cookie("user"), CoboCSVReader.readCsvFile(fileInCombo.getPath() + "", usersHashRouters.get(req.cookie("user"))));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
+
+
+
+            //================================================
+
             if(file.list().length>0){
                 System.out.println("saving to csv output");
                 HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csv("UserFiles/upload/"+req.cookie("user"),"UserFiles/output/"+req.cookie("user"));
@@ -122,11 +200,15 @@ public class Main{
 
                 OutputCSVWriter outputCSVWriter = new OutputCSVWriter(selectedFiles);
 
-                processedFile =outputCSVWriter.sortAndMergeFiles();
+                processedFile.addAll(outputCSVWriter.sortAndMergeFiles());
+                usersProcessedFile.put(req.cookie("user"),processedFile);
+                System.out.println(req.cookie("user"));
 
                 //==========================================added 12-31-17 - end
-                System.out.println(req.cookie("user"));
-                return "true,"+req.cookie("user");
+                System.out.println("processed file size:"+ usersProcessedFile.get(req.cookie("user")).size());
+                System.out.println("hash routers file size:"+ usersHashRouters.get(req.cookie("user")).getCountOfRouters());
+                return "true,"+req.cookie("user")+","+usersProcessedFile.get(req.cookie("user")).size()+","
+                        +usersHashRouters.get(req.cookie("user")).getCountOfRouters();
 //                return "true,nis";
             }else{
                 System.out.println("cannot save to output csv");
@@ -189,9 +271,10 @@ public class Main{
 
             OutputCSVWriter outputCSVWriter = new OutputCSVWriter(selectedFiles);
 
-            processedFile =  outputCSVWriter.sortAndMergeFiles();
+            //processedFile =  outputCSVWriter.sortAndMergeFiles();
+            usersProcessedFile.put(req.cookie("user"),outputCSVWriter.sortAndMergeFiles());
 
-            List<WIFIWeight> kLineMostSimilar = Algorithm2.getKMostSimilar(processedFile, userInput, 3);
+            List<WIFIWeight> kLineMostSimilar = Algorithm2.getKMostSimilar(usersProcessedFile.get(req.cookie("user")), userInput, 3);
 
             WeightedArithmeticMean weightedArithmeticMean = new WeightedArithmeticMean(usersHashRouters.get(req.cookie("user")) );
 

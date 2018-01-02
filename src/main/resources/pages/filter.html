@@ -20,130 +20,147 @@
     <div class="row">
         <div class="col-lg">
 
-<div class="alert alert-info" role="alert">
-    <h4 class="alert-heading">Filters</h4>
-    <hr>
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading">Filters</h4>
+                <hr>
 
-    <!-- Search box Start -->
-    <form >
-        <div class="form-row align-items-center">
-            <div class="col-auto">
-                <label class="mr-sm-2" for="inlineFormCustomSelect">Filter</label>
-                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="FilterBySelection">
-                    <option selected>Choose Filter</option>
-                    <option value="1">Time</option>
-                    <option value="2">Location</option>
-                    <option value="3">Device</option>
-                </select>
-            </div>
-            <div class="col-auto">
-                <label class="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">
-                    <input type="checkbox" class="custom-control-input" id="NegateInput1">
-                    <span class="custom-control-indicator"></span>
-                    <span class="custom-control-description">Negate</span>
-                </label>
-            </div>
-
-
-            <div class="col-auto">
-                <label class="mr-sm-2" for="inlineFormCustomSelect"></label>
-                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="FilterByLogic">
-                    <option selected>Choose Logic</option>
-                    <option value="1">And</option>
-                    <option value="2">Or</option>
-                </select>
-            </div>
+                <!-- Search box Start -->
+                <form >
+                    <div class="form-row align-items-center">
+                        <div class="col-auto">
+                            <label class="mr-sm-2" for="inlineFormCustomSelect">Filter</label>
+                            <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="FilterBySelection">
+                                <option selected>Choose Filter</option>
+                                <option value="1">Time</option>
+                                <option value="2">Location</option>
+                                <option value="3">Device</option>
+                            </select>
+                        </div>
+                        <div class="col-auto">
+                            <label class="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">
+                                <input type="checkbox" class="custom-control-input" id="NegateInput1">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Negate</span>
+                            </label>
+                        </div>
 
 
-            <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-        </div>
-    </form>
-    <!-- Search box End -->
-
-    <hr>
-    <div class="btn-group">
-        <button type="button" id="btnAddFilter" class="btn btn-primary">+</button>
-        <p>-----</p>
-        <button type="button" id="btnFilterSumbit" class="btn btn-primary">Filter</button>
-        <p>-----</p>
-        <button type="button" id="btnSaveFilter" class="btn btn-primary">Save Filter</button>
-    </div>
-
-    <!-- Input boxes -->
-    <hr>
-    <div id="inputDeviceDiv">
-        <input type="text" id="inputDevice" placeholder="device" class="inputFilter">
-    </div>
-
-    <div id="inputTimeDiv">
-        <input type="text" id="inputStartTime" placeholder="start" class="inputFilter">
-        <input type="text" id="inputEndTime" placeholder="end" class="inputFilter">
-    </div>
-
-    <div id="inputLocationeDiv">
-        <input type="text" id="inputStartLat" placeholder="start lat" class="inputFilter">
-        <input type="text" id="inputStartLon" placeholder="start lon" class="inputFilter">
-        <hr>
-        <input type="text" id="inputEndLat" placeholder="end lat" class="inputFilter">
-        <input type="text" id="inputEndLon" placeholder="end lon" class="inputFilter">
-    </div>
+                        <div class="col-auto">
+                            <label class="mr-sm-2" for="inlineFormCustomSelect"></label>
+                            <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="FilterByLogic">
+                                <option selected>Choose Logic</option>
+                                <option value="1">And</option>
+                                <option value="2">Or</option>
+                            </select>
+                        </div>
 
 
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </form>
+                <!-- Search box End -->
 
-    <!-- Selection filter 2 -->
-
-
-
-    <div id="inputFilter2">
-        <hr>
-        <h2>Filter 2</h2>
-        <hr>
-        <form >
-            <div class="form-row align-items-center">
-                <div class="col-auto">
-                    <label class="mr-sm-2" for="inlineFormCustomSelect">Filter</label>
-                    <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="FilterBySelection2">
-                        <option selected>Choose Filter</option>
-                        <option value="1">Time</option>
-                        <option value="2">Location</option>
-                        <option value="3">Device</option>
-                    </select>
+                <hr>
+                <div class="btn-group">
+                    <button type="button" id="btnAddFilter" class="btn btn-primary">+</button>
+                    <p>-----</p>
+                    <button type="button" id="btnFilterSumbit" class="btn btn-primary">Filter</button>
+                    <p>-----</p>
+                    <button type="button" id="btnSaveFilter" class="btn btn-primary">Save Filter</button>
                 </div>
-                <div class="col-auto">
-                    <label class="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">
-                        <input type="checkbox" class="custom-control-input" id="NegateInput2">
-                        <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Negate</span>
-                    </label>
+
+                <!-- Input boxes -->
+                <hr>
+                <div id="inputDeviceDiv">
+                    <input type="text" id="inputDevice" placeholder="device" class="inputFilter">
                 </div>
+
+                <div id="inputTimeDiv">
+
+                    <input id="start" class="inputStyle" type="date" name="bday" value="2017-05-05" onchange="myFunction()" max=>
+                    Enter start time:<br>
+                    <input type="time" class="inputStyle" id="startTime" step="1" value="20:00:00">
+
+                    <br><br>
+                    Enter end date:<br>
+                    <input id="end"  class="inputStyle" type="date" name="bday" value="2017-05-05">
+                    Enter end time:<br>
+                    <input type="time" class="inputStyle" id="endTime" step="1" value="20:00:00">”
+                    <button id="applyDate">Apply Date</button>
+                </div>
+
+                <div id="inputLocationeDiv">
+                    <input type="text" id="inputStartLat" placeholder="start lat" class="inputFilter">
+                    <input type="text" id="inputStartLon" placeholder="start lon" class="inputFilter">
+                    <hr>
+                    <input type="text" id="inputEndLat" placeholder="end lat" class="inputFilter">
+                    <input type="text" id="inputEndLon" placeholder="end lon" class="inputFilter">
+                </div>
+
+
+
+                <!-- Selection filter 2 -->
+
+
+
+                <div id="inputFilter2">
+                    <hr>
+                    <h2>Filter 2</h2>
+                    <hr>
+                    <form >
+                        <div class="form-row align-items-center">
+                            <div class="col-auto">
+                                <label class="mr-sm-2" for="inlineFormCustomSelect">Filter</label>
+                                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="FilterBySelection2">
+                                    <option selected>Choose Filter</option>
+                                    <option value="1">Time</option>
+                                    <option value="2">Location</option>
+                                    <option value="3">Device</option>
+                                </select>
+                            </div>
+                            <div class="col-auto">
+                                <label class="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">
+                                    <input type="checkbox" class="custom-control-input" id="NegateInput2">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">Negate</span>
+                                </label>
+                            </div>
+                        </div>
+                    </form >
+
+                    <!-- Input boxes filter 2 -->
+
+                    <hr>
+                    <div id="inputDeviceDiv2">
+                        <input type="text" id="inputDevice2" placeholder="device 2" class="inputFilter2">
+                    </div>
+
+                    <div id="inputTimeDiv2">
+                        <input id="start2" class="inputStyle" type="date" name="bday" value="2017-05-05" onchange="myFunction()" max=>
+                        Enter start time:<br>
+                        <input type="time" class="inputStyle" id="startTime2" step="1" value="20:00:00">
+
+                        <br><br>
+                        Enter end date:<br>
+                        <input id="end2"  class="inputStyle" type="date" name="bday" value="2017-05-05">
+                        Enter end time:<br>
+                        <input type="time" class="inputStyle" id="endTime2" step="1" value="20:00:00">”
+                        <button id="applyDate2">Apply Date</button>
+                    </div>
+
+                    <div id="inputLocationeDiv2">
+                        <input type="text" id="inputStartLat2" placeholder="start lat 2" class="inputFilter2">
+                        <input type="text" id="inputStartLon2" placeholder="start lon 2" class="inputFilter2">
+                        <hr>
+                        <input type="text" id="inputEndLat2" placeholder="end lat 2" class="inputFilter2">
+                        <input type="text" id="inputEndLon2" placeholder="end lon 2" class="inputFilter2">
+                    </div>
+                </div>
+
+
             </div>
-        </form >
-
-        <!-- Input boxes filter 2 -->
-
-        <hr>
-        <div id="inputDeviceDiv2">
-            <input type="text" id="inputDevice2" placeholder="device 2" class="inputFilter2">
-        </div>
-
-        <div id="inputTimeDiv2">
-            <input type="text" id="inputStartTime2" placeholder="start 2" class="inputFilter2">
-            <input type="text" id="inputEndTime2" placeholder="end 2" class="inputFilter2">
-        </div>
-
-        <div id="inputLocationeDiv2">
-            <input type="text" id="inputStartLat2" placeholder="start lat 2" class="inputFilter2">
-            <input type="text" id="inputStartLon2" placeholder="start lon 2" class="inputFilter2">
-            <hr>
-            <input type="text" id="inputEndLat2" placeholder="end lat 2" class="inputFilter2">
-            <input type="text" id="inputEndLon2" placeholder="end lon 2" class="inputFilter2">
-        </div>
-    </div>
-
-
-    </div>
         </div>
     </div>
 </div>
@@ -248,9 +265,9 @@
 
         }<!-- Submit Time Filter -->
         else if ($("#FilterBySelection :selected").text().includes('Time')) {
-            sessionStorage.setItem('inputStartTime1', $("#inputStartTime").val() );
-            sessionStorage.setItem('inputEndTime1', $("#inputEndTime").val() );
-            Cookies.set('input1', $("#inputStartTime").val() +"&"+ $("#inputEndTime").val() , { expires: 600 });
+
+            Cookies.set('input1', $("#start").val()+"T"+$("#startTime").val() +"&"+ $("#end").val()+"T"+$("#endTime").val() , { expires: 600 });
+
         }
         if (!$("#FilterByLogic :selected").text().includes('Choose Logic')){
 
@@ -271,9 +288,9 @@
 
             }<!-- Submit Time Filter -->
             else if ($("#FilterBySelection2 :selected").text().includes('Time')) {
-                sessionStorage.setItem('inputStartTime1', $("#inputStartTime").val() );
-                sessionStorage.setItem('inputEndTime1', $("#inputEndTime").val() );
-                Cookies.set('input2', $("#inputStartTime2").val() +"&"+ $("#inputEndTime2").val() , { expires: 600 });
+
+                Cookies.set('input2', $("#start2").val()+"T"+$("#startTime2").val() +"&"+ $("#end2").val()+"T"+$("#endTime2").val() , { expires: 600 });
+
             }
         }
         else if ($("#FilterByLogic :selected").text().includes('Choose Logic')){
@@ -322,9 +339,7 @@
 
         }<!-- Submit Time Filter -->
         else if ($("#FilterBySelection :selected").text().includes('Time')) {
-            sessionStorage.setItem('inputStartTime1', $("#inputStartTime").val() );
-            sessionStorage.setItem('inputEndTime1', $("#inputEndTime").val() );
-            Cookies.set('input1', $("#inputStartTime").val() +"&"+ $("#inputEndTime").val() , { expires: 600 });
+            Cookies.set('input1', $("#start").val()+"T"+$("#startTime").val() +"&"+ $("#end").val()+"T"+$("#endTime").val() , { expires: 600 });
         }
         if (!$("#FilterByLogic :selected").text().includes('Choose Logic')){
 
@@ -345,9 +360,8 @@
 
             }<!-- Submit Time Filter -->
             else if ($("#FilterBySelection2 :selected").text().includes('Time')) {
-                sessionStorage.setItem('inputStartTime1', $("#inputStartTime").val() );
-                sessionStorage.setItem('inputEndTime1', $("#inputEndTime").val() );
-                Cookies.set('input2', $("#inputStartTime2").val() +"&"+ $("#inputEndTime2").val() , { expires: 600 });
+                Cookies.set('input2', $("#start2").val()+"T"+$("#startTime2").val() +"&"+ $("#end2").val()+"T"+$("#endTime2").val() , { expires: 600 });
+
             }
         }
         else if ($("#FilterByLogic :selected").text().includes('Choose Logic')){
@@ -382,6 +396,121 @@
 
         }else if ($("#FilterByLogic :selected").text().includes('Choose Logic')) {
             $("div#inputFilter2").hide();
+        }
+    });
+
+    <!-- date picker -->
+    <!-- time picker sources: Reut and Inon-->
+    // applay the dates filter
+    $("button#applyDate").click(function() {
+        var input1 = $("input#start").val();
+        var input11= $("input#startTime").val();
+        var input2 = $("input#end").val();
+        var input22= $("input#endTime").val();
+
+        var final= input1+" "+ input11+"  to    "+ input2+" "+input22;
+        console.log("filter 1:"+final+"");
+        console.log("start:"+$("input#start").val());
+        console.log("start time :"+$("input#startTime").val());
+        $("input#start").val()+'T'+$("input#startTime").val();
+
+
+
+    });
+
+    $('#start').on("change", function(){
+        $(this).attr('value', $('#start').val());
+        $('#end').attr('min', $('#start').val());
+        $('#end').attr('value', $('#start').val());
+
+
+    });
+
+
+    $('#end').on("change", function(){
+        if($('#start').val()>$('#end').val()){
+            $('#start').attr('value', $('#end').val());
+        }
+        $(this).attr('value', $('#end').val());
+        $('#end').attr('min', $('#start').val());
+        $('#start').attr('max', $('#end').val());
+        if($('#start').val()==$('#end').val()){
+            $('#endTime').attr('min', $('#startTime').val());
+            $('#startTime').attr('max', $('#endTime').val());
+        }
+    });
+
+
+    $('#startTime').on("change", function(){
+        if($('#start').val()==$('#end').val()){
+            if($('#startTime').val()>$('#endTime').val())
+                $('#endTime').attr('value', $('#startTime').val());
+        }
+    });
+
+
+    $('#endTime').on("change", function(){
+        if($('#start').val()==$('#end').val()){
+            if($('#endTime').val()<$('#startTime').val()){
+                $('#startTime').attr('value', $('#endTime').val());
+            }
+        }
+    });
+    <!-- date picker 2-->
+    <!-- time picker sources: Reut and Inon-->
+    // applay the dates filter
+    $("button#applyDate").click(function() {
+        var input1 = $("input#start2").val();
+        var input11= $("input#startTime2").val();
+        var input2 = $("input#end2").val();
+        var input22= $("input#endTime2").val();
+
+        var final= input1+" "+ input11+"  to    "+ input2+" "+input22;
+        console.log("filter 1:"+final+"");
+        console.log("start:"+$("input#start2").val());
+        console.log("start time :"+$("input#startTime2").val());
+        $("input#start").val()+'T'+$("input#startTime2").val();
+
+
+
+    });
+
+    $('#start2').on("change", function(){
+        $(this).attr('value', $('#start2').val());
+        $('#end2').attr('min', $('#start2').val());
+        $('#end2').attr('value', $('#start2').val());
+
+
+    });
+
+
+    $('#end2').on("change", function(){
+        if($('#start2').val()>$('#end2').val()){
+            $('#start2').attr('value', $('#end2').val());
+        }
+        $(this).attr('value', $('#end2').val());
+        $('#end2').attr('min', $('#start2').val());
+        $('#start2').attr('max', $('#end2').val());
+        if($('#start2').val()==$('#end2').val()){
+            $('#endTime2').attr('min', $('#startTime2').val());
+            $('#startTime2').attr('max', $('#endTime2').val());
+        }
+    });
+
+
+    $('#startTime2').on("change", function(){
+        if($('#start2').val()==$('#end2').val()){
+            if($('#startTime2').val()>$('#endTime2').val())
+                $('#endTime2').attr('value', $('#startTime2').val());
+        }
+    });
+
+
+    $('#endTime2').on("change", function(){
+        if($('#start2').val()==$('#end2').val()){
+            if($('#endTime2').val()<$('#startTime2').val()){
+                $('#startTime2').attr('value', $('#endTime2').val());
+            }
         }
     });
 </script>
