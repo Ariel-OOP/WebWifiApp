@@ -187,8 +187,9 @@ public class Main{
 
             if(file.list().length>0){
                 System.out.println("saving to csv output");
-                HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csv("UserFiles/upload/"+req.cookie("user"),"UserFiles/output/"+req.cookie("user"));
-                usersHashRouters.put(req.cookie("user"),currnetHashRouter);
+                usersHashRouters.get(req.cookie("user")).mergeToHash(Save2CSV.save2csv("UserFiles/upload/"+req.cookie("user"),"UserFiles/output/"+req.cookie("user")));
+                //HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csv("UserFiles/upload/"+req.cookie("user"),"UserFiles/output/"+req.cookie("user"));
+                usersHashRouters.put(req.cookie("user"),usersHashRouters.get(req.cookie("user")));
 //                hashRouters = Save2CSV.save2csv("upload/"+req.cookie("user"),"output/"+req.cookie("user"));
 
                 //==========================================added 12-31-17
