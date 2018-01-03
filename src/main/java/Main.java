@@ -310,7 +310,6 @@ public class Main{
 //            return "Lat is: "+(ww.getWIFI_Lat()+"").substring(0,6)+"  ,Lon is: "+(ww.getWIFI_Lon()+"").substring(0,6)+"  ,Alt is: "+(ww.getWIFI_Alt()+"").substring(0,6) ;
 
             return  "0,0,0";
-
         });
 
         get("/submitAlgo2", (req, res) ->{
