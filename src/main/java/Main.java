@@ -447,12 +447,29 @@ public class Main{
 
             //=========================================================
             ArrayList<WIFIWeight> userInput = new ArrayList<WIFIWeight>();
+            File file = new File("UserFiles\\combo.csv");
+
+            // creates the file
+            file.createNewFile();
+
+            // creates a FileWriter Object
+            FileWriter writer = new FileWriter(file);
+
+            // Writes the content to the file
+            writer.write("Time,ID,Lat,Lon,Alt,\"#WiFi networks\",SSID1,MAC1,Frequncy1,Signal1,SSID2,MAC2,Frequncy2"
+                    +",Signal2,SSID3,MAC3,Frequncy3,Signal3,SSID4,MAC4,Frequncy4,Signal4,SSID5,MAC5,Frequncy5,Signal5,SSID6,MAC6,Frequncy6" +
+                    ",Signal6,SSID7,MAC7,Frequncy7,Signal7,SSID8,MAC8,Frequncy8,Signal8,SSID9,MAC9,Frequncy9,Signal9,SSID10,MAC10,Frequncy10,Signal10"
+            );
+            writer.write("\n"+req.queryString().replace("%20"," "));
+            writer.flush();
+            writer.close();
+
 
             ArrayList<WIFIWeight> listOfWIFIWeightsUsingAlgo2 = new ArrayList<>();//Hold locations of all lines of the combination without location CSV File
 
             //Read the combination-without-location-CSV-File and inserts all line to the ArrayList<ArrayList<WIFIWeight>>.
             //the innter ArrayList<WIFIWeight> hold one line of combination-without-location-CSV-File. and the external ArrayList hold all of lines.
-            ArrayList<ArrayList<WIFIWeight>> listOfCombinationCsvLines = CSVReader.readCombinationCsvFile("combo.csv");
+            ArrayList<ArrayList<WIFIWeight>> listOfCombinationCsvLines = CSVReader.readCombinationCsvFile("UserFiles\\combo.csv");
             for(ArrayList<WIFIWeight> line : listOfCombinationCsvLines) {
                 //run algorithm 2 on each line, get the WIFIWeight of each line and insert to ArrayList.
                 List<WifiPointsTimePlace> newPFile = usersProcessedFile.get(req.cookie("user"));
@@ -466,8 +483,8 @@ public class Main{
 
             //Getting all lines of combination-without-location-CSV-File and insert the new locations and export to new file
             try {
-                List<WifiPointsTimePlace> s = CoboCSVReader.readCsvFile("combo.csv", usersHashRouters.get(req.cookie("user")));
-                OutputCSVWriter.changeLocationOfFile(listOfWIFIWeightsUsingAlgo2,s, "afterAlgo2.csv");
+                List<WifiPointsTimePlace> s = CoboCSVReader.readCsvFile("UserFiles\\combo.csv", usersHashRouters.get(req.cookie("user")));
+                OutputCSVWriter.changeLocationOfFile(listOfWIFIWeightsUsingAlgo2,s, "UserFiles\\comboAfterAlgo2.csv");
             }
             catch (IOException e)
             {

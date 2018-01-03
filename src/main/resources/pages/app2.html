@@ -206,10 +206,15 @@
 
     <div class="jumbotron">
         <div class="row">
-            <div class="col-lg-4 col-md-3 col-sm-4">
+            <div class="col-lg-5 col-md-3 col-sm-4">
                 <h4>Algo 2</h4>
                 Calculates the weighted arithmic mean of the mac
                 entered.
+            </div>
+            <div class="col-lg-4 col-md-3 col-sm-4">
+                <h4>Combo</h4>
+                Enter Combo line into the text box press
+                Combo??? and get result.
             </div>
 
         </div>
@@ -247,17 +252,17 @@
                 </div><br>
             </div>
             <!-- combo text input-->
-            <div class="col-lg-2 col-md-3 col-sm-3">
+            <div class="col-lg-3 col-md-3 col-sm-3">
                 <br>
                 <div class="input-group input-group-lg">
                     <input id="comboTextInput" type="text" class="form-control" placeholder="Combo Text" value="">
                     <span class="input-group-btn">
-          <button id="submitComboWithQuestionMarksAlgo2" class="btn btn-default" type="button" name="button">Enter</button>
+          <button id="submitComboWithQuestionMarksAlgo2" class="btn btn-default" type="button" name="button">Combo ???</button>
         </span>
                 </div><br>
             </div>
 
-            <div class="col-lg-5 col-md-3 col-sm-6">
+            <div class="col-lg-4 col-md-3 col-sm-6">
                 <canvas id="myChartAlgo2" width="200" height="200"></canvas>
 
             </div>
@@ -529,9 +534,7 @@
             var comboInput  = $("input#comboTextInput").val();
         $.ajax(
             {
-                "url": encodeURI("/submitComboWithQuestionMarksAlgo2?" +
-                    'Time,ID,Lat,Lon,Alt,"#WiFi networks",SSID1,MAC1,Frequncy1,Signal1,SSID2,MAC2,Frequncy2,Signal2,SSID3,MAC3,Frequncy3,Signal3,SSID4,MAC4,Frequncy4,Signal4,SSID5,MAC5,Frequncy5,Signal5,SSID6,MAC6,Frequncy6,Signal6,SSID7,MAC7,Frequncy7,Signal7,SSID8,MAC8,Frequncy8,Signal8,SSID9,MAC9,Frequncy9,Signal9,SSID10,MAC10,Frequncy10,Signal10'
-                    +"\n"+ comboInput )
+                "url": encodeURI("/submitComboWithQuestionMarksAlgo2?" +comboInput )
             }
         ).then(
             function(output) {
