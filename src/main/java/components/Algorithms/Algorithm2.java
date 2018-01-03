@@ -84,7 +84,8 @@ public class Algorithm2 {
         }
 
         for(int i = 0; i < diffs.size(); i++) {
-            weights.add(norm/(Math.pow(diffs.get(i),sig_diff)*Math.pow(signalsUser.get(i),power)));
+            int difference = (diffs.get(i) > 3)? diffs.get(i) : 3;
+            weights.add(norm/(Math.pow(difference,sig_diff)*Math.pow(signalsUser.get(i),power)));
         }
 
         for(int i = 0; i < weights.size(); i++) {
