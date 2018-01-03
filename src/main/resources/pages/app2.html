@@ -246,6 +246,16 @@
         </span>
                 </div><br>
             </div>
+            <!-- combo text input-->
+            <div class="col-lg-2 col-md-3 col-sm-3">
+                <br>
+                <div class="input-group input-group-lg">
+                    <input id="comboTextInput" type="text" class="form-control" placeholder="Combo Text" value="">
+                    <span class="input-group-btn">
+          <button id="submitComboWithQuestionMarksAlgo2" class="btn btn-default" type="button" name="button">Enter</button>
+        </span>
+                </div><br>
+            </div>
 
             <div class="col-lg-5 col-md-3 col-sm-6">
                 <canvas id="myChartAlgo2" width="200" height="200"></canvas>
@@ -512,6 +522,45 @@
         })
 
         <!-------------------end of algo 2-------------------------->
+
+        <!-------------------start of combo ???-------------------------->
+
+        $("button#submitComboWithQuestionMarksAlgo2").click(() => {
+            var comboInput  = $("input#comboTextInput").val();
+        $.ajax(
+            {
+                "url": encodeURI("/submitComboWithQuestionMarksAlgo2?" +
+                    'Time,ID,Lat,Lon,Alt,"#WiFi networks",SSID1,MAC1,Frequncy1,Signal1,SSID2,MAC2,Frequncy2,Signal2,SSID3,MAC3,Frequncy3,Signal3,SSID4,MAC4,Frequncy4,Signal4,SSID5,MAC5,Frequncy5,Signal5,SSID6,MAC6,Frequncy6,Signal6,SSID7,MAC7,Frequncy7,Signal7,SSID8,MAC8,Frequncy8,Signal8,SSID9,MAC9,Frequncy9,Signal9,SSID10,MAC10,Frequncy10,Signal10'
+                    +"\n"+ comboInput )
+            }
+        ).then(
+            function(output) {
+                var splitOutput = output.split(",");
+
+                new Chart(document.getElementById("myChartAlgo2"),
+                    {"type":"bubble","data":{"datasets":[{"label":"Wifi Points",
+                        "data":[{"x":31,"y":30,"r":5},{"x":parseFloat(splitOutput[0]),"y":parseFloat(splitOutput[1]),"r":10},{"x":30,"y":33,"r":5},{"x":33,"y":36,"r":5}],
+                        "backgroundColor":"rgb(255, 99, 132)"}]}});
+
+
+            <!--------------append wifi point to table--------------------------->
+                var tableColor;
+                var iterationTable= incrTable();
+                if (iterationTable%2==1){
+                    tableColor='danger';
+                }else {
+                    tableColor ='info';
+                }
+                var tr = "<tr class="+tableColor+"><td>"+splitOutput[3]+"</td><td>"
+                    +splitOutput[0]+"</td><td>"+splitOutput[1]+"</td><td>"+splitOutput[2]+"</td></tr>"
+                $('table#algo2Table').append(tr);
+            <!--------------end of appending table--------------------------->
+            }
+        );
+        return false
+        })
+
+        <!-------------------end of submit combo ???-------------------------->
 
         <!--start of save to kml -->
 
