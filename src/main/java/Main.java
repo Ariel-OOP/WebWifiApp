@@ -8,11 +8,10 @@ import components.Attributes.WIFISample;
 import components.Attributes.WIFIWeight;
 import components.Attributes.WifiPointsTimePlace;
 import components.CSV_IO.CoboCSVReader;
+import components.CSV_IO.KmlExporter;
 import components.CSV_IO.OutputCSVWriter;
-import components.Filters.DevicePredicate;
-import components.Filters.PlacePredicate;
-import components.Filters.TimePredicate;
-import components.Filters.WebsiteFilter;
+import components.Console_App.LineFilters;
+import components.Filters.*;
 import spark.Request;
 import spark.Response;
 import webserver.Save2CSV;
@@ -45,7 +44,7 @@ public class Main{
 
 
 
-
+//
 //        //===========================Watch Service============================================
 //        WatchService watchService
 //                = null;
@@ -55,10 +54,17 @@ public class Main{
 //            e.printStackTrace();
 //        }
 //
-//        Path path = Paths.get("UserFiles");
+//        Path path = Paths.get("UserFiles\\comboFolder");
+//        Path path2 = Paths.get("UserFiles\\upload");
+//
 //
 //        try {
 //            path.register(
+//                    watchService,
+//                    StandardWatchEventKinds.ENTRY_CREATE,
+//                    StandardWatchEventKinds.ENTRY_DELETE,
+//                    StandardWatchEventKinds.ENTRY_MODIFY);
+//            path2.register(
 //                    watchService,
 //                    StandardWatchEventKinds.ENTRY_CREATE,
 //                    StandardWatchEventKinds.ENTRY_DELETE,
@@ -70,6 +76,7 @@ public class Main{
 //        WatchKey key;
 //        while ((key = watchService.take()) != null) {
 //            for (WatchEvent<?> event : key.pollEvents()) {
+//                    System.out.println("do something");
 //                System.out.println(
 //                        "Event kind:" + event.kind()
 //                                + ". File affected: " + event.context() + ".");
@@ -88,6 +95,7 @@ public class Main{
         new File("UserFiles/output").mkdir();
         new File("UserFiles/comboFolder").mkdir();
         new File("UserFiles/filteredOutput").mkdir();
+        new File("UserFiles/KmlOutput").mkdir();
         usersProcessedFile = new Hashtable<>();
         processedFile = new ArrayList<>();
 
@@ -184,8 +192,8 @@ public class Main{
 
 
             //================================================
-
-            if(file.list().length>0){
+             if(file.list().length>0){
+//            if(file.list().length>0 || comboFiles.list().length>0){
                 System.out.println("saving to csv output");
                 usersHashRouters.get(req.cookie("user")).mergeToHash(Save2CSV.save2csv("UserFiles/upload/"+req.cookie("user"),"UserFiles/output/"+req.cookie("user")));
                 //HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csv("UserFiles/upload/"+req.cookie("user"),"UserFiles/output/"+req.cookie("user"));
@@ -211,7 +219,38 @@ public class Main{
                 return "true,"+req.cookie("user")+","+usersProcessedFile.get(req.cookie("user")).size()+","
                         +usersHashRouters.get(req.cookie("user")).getCountOfRouters();
 //                return "true,nis";
-            }else{
+             }else if (comboFiles.list().length>0){
+                 System.out.println("saving to csv output");
+                 usersHashRouters.get(req.cookie("user")).mergeToHash(Save2CSV.save2csv("UserFiles/upload/"+req.cookie("user"),"UserFiles/output/"+req.cookie("user")));
+                 //HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csv("UserFiles/upload/"+req.cookie("user"),"UserFiles/output/"+req.cookie("user"));
+                 usersHashRouters.put(req.cookie("user"),usersHashRouters.get(req.cookie("user")));
+//                hashRouters = Save2CSV.save2csv("upload/"+req.cookie("user"),"output/"+req.cookie("user"));
+
+                 //==========================================added 12-31-17
+                 List<File> selectedFiles= new ArrayList<>();
+                 for(File file2 : comboFiles.listFiles()){
+                     selectedFiles.add(file2);
+                 }
+
+//                 OutputCSVWriter outputCSVWriter = new OutputCSVWriter(selectedFiles);
+                 for (File comboSingleFile : comboFiles.listFiles()){
+                     processedFile.addAll(CoboCSVReader.readCsvFile(comboSingleFile.getPath(),usersHashRouters.get(req.cookie("user"))));
+
+                 }
+
+
+//                 processedFile.addAll(outputCSVWriter.sortAndMergeFiles());
+                 usersProcessedFile.put(req.cookie("user"),processedFile);
+                 System.out.println(req.cookie("user"));
+
+                 //==========================================added 12-31-17 - end
+                 System.out.println("processed file size:"+ usersProcessedFile.get(req.cookie("user")).size());
+                 System.out.println("hash routers file size:"+ usersHashRouters.get(req.cookie("user")).getCountOfRouters());
+                 return "true,"+req.cookie("user")+","+usersProcessedFile.get(req.cookie("user")).size()+","
+                         +usersHashRouters.get(req.cookie("user")).getCountOfRouters();
+//                return "true,nis";
+
+             }else{
                 System.out.println("cannot save to output csv");
                 System.out.println("Directory is empty!");
                 return "false,"+req.cookie("user");
@@ -401,6 +440,22 @@ public class Main{
             res.redirect("app2.html");
             return req.cookie("user")+"";
 //            return "sent files";
+        });
+
+        get("/Save2kml", (req, res) ->{
+            Filter filter = new Filter(0);
+            File kmlFolder = new File("UserFiles/KmlOutput//"+req.cookie("user"));
+
+            if (!kmlFolder.exists())
+                new File("UserFiles/KmlOutput//"+req.cookie("user")).mkdir();
+
+            KmlExporter kmlExporter = new KmlExporter("UserFiles\\output\\"+req.cookie("user")+"\\OutputCSV.csv","UserFiles\\KmlOutput\\"+req.cookie("user")+"\\KML1.kml");
+            if(kmlExporter.csvToKml(filter) )
+                System.out.println("successful export kml");
+            else
+                System.out.println("failure to export kml");
+            return "success";
+
         });
     }
     static int getHerokuAssignedPort() {
