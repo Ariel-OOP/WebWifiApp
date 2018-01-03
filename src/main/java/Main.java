@@ -46,43 +46,118 @@ public class Main{
 
 //
 //        //===========================Watch Service============================================
-//        WatchService watchService
-//                = null;
-//        try {
-//            watchService = FileSystems.getDefault().newWatchService();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Path path = Paths.get("UserFiles\\comboFolder");
-//        Path path2 = Paths.get("UserFiles\\upload");
-//
-//
-//        try {
-//            path.register(
-//                    watchService,
-//                    StandardWatchEventKinds.ENTRY_CREATE,
-//                    StandardWatchEventKinds.ENTRY_DELETE,
-//                    StandardWatchEventKinds.ENTRY_MODIFY);
-//            path2.register(
-//                    watchService,
-//                    StandardWatchEventKinds.ENTRY_CREATE,
-//                    StandardWatchEventKinds.ENTRY_DELETE,
-//                    StandardWatchEventKinds.ENTRY_MODIFY);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        WatchKey key;
-//        while ((key = watchService.take()) != null) {
-//            for (WatchEvent<?> event : key.pollEvents()) {
-//                    System.out.println("do something");
-//                System.out.println(
-//                        "Event kind:" + event.kind()
-//                                + ". File affected: " + event.context() + ".");
-//            }
-//            key.reset();
-//        }
+        WatchService watchService
+                = null;
+        try {
+            watchService = FileSystems.getDefault().newWatchService();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Path path = Paths.get("UserFiles\\comboFolder\\auto");
+        Path path2 = Paths.get("UserFiles\\upload\\auto");
+
+
+        try {
+            path.register(
+                    watchService,
+                    StandardWatchEventKinds.ENTRY_CREATE,
+                    StandardWatchEventKinds.ENTRY_DELETE,
+                    StandardWatchEventKinds.ENTRY_MODIFY);
+            path2.register(
+                    watchService,
+                    StandardWatchEventKinds.ENTRY_CREATE,
+                    StandardWatchEventKinds.ENTRY_DELETE,
+                    StandardWatchEventKinds.ENTRY_MODIFY);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        WatchKey key;
+        while ((key = watchService.take()) != null) {
+            for (WatchEvent<?> event : key.pollEvents()) {
+
+//              ===========================End New Watch Service======!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!===============
+                // create the upload directory if it doesn't exist
+
+
+                //===================================================
+
+                File file = new File("UserFiles/upload/auto");
+
+                processedFile = new ArrayList<>();
+                usersHashRouters.put("auto",new HashRouters());
+                usersProcessedFile.put("auto", processedFile);//Because that each time the program read all the files again we need to delete the old files fot dont append the new files on the old files
+
+                File comboFiles = new File("UserFiles/comboFolder/auto");
+
+                System.out.println(comboFiles.exists());
+                if (comboFiles.exists() ) {
+                    if (comboFiles.list().length > 0) {
+                        for (File fileInCombo : comboFiles.listFiles()) {
+                            try {
+                                System.out.println(fileInCombo.getPath() + "");
+                                if (usersHashRouters.get("auto") == null)
+                                    usersHashRouters.put("auto",new HashRouters());
+                                processedFile.addAll(CoboCSVReader.readCsvFile(fileInCombo.getPath() + "", usersHashRouters.get("auto")));
+                                usersProcessedFile.put("auto", processedFile);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+
+                if (usersHashRouters.get("auto") == null)
+                    usersHashRouters.put("auto",new HashRouters());
+
+                String userName = "auto";
+                //================================================
+                if(file.list() != null && file.list().length>0){
+//            if(file.list().length>0 || comboFiles.list().length>0){
+                    System.out.println("saving to csv output");
+//                String userName = req.cookie("user");
+                    System.out.println(userName);
+                    HashRouters<String,WIFISample> temp = usersHashRouters.get(userName);
+                    temp.mergeToHash(Save2CSV.save2csv("UserFiles/upload/"+userName,"UserFiles/output/"+userName));
+                    //HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csv("UserFiles/upload/"+req.cookie("user"),"UserFiles/output/"+req.cookie("user"));
+                    usersHashRouters.put(userName,usersHashRouters.get(userName));
+//                hashRouters = Save2CSV.save2csv("upload/"+req.cookie("user"),"output/"+req.cookie("user"));
+
+                    //==========================================added 12-31-17
+                    List<File> selectedFiles= new ArrayList<>();
+                    File uploads = new File("UserFiles/upload/"+userName);
+                    for(File file2 : uploads.listFiles()){
+                        selectedFiles.add(file2);
+                    }
+
+                    OutputCSVWriter outputCSVWriter = new OutputCSVWriter(selectedFiles);
+
+                    processedFile.addAll(outputCSVWriter.sortAndMergeFiles());
+                    usersProcessedFile.put(userName,processedFile);
+                    System.out.println(userName);
+
+                    //==========================================added 12-31-17 - end
+                    System.out.println("processed file size:"+ usersProcessedFile.get(userName).size());
+                    System.out.println("hash routers file size:"+ usersHashRouters.get(userName).getCountOfRouters());
+                }
+
+                OutputCSVWriter.ExportToCSV(usersProcessedFile.get(userName),"UserFiles/output/"+userName+"/OutputCSV.csv",null);
+
+                System.out.println("Change");
+
+//               return "true,"+userName+","+usersProcessedFile.get(userName).size()+","
+//                       +usersHashRouters.get(userName).getCountOfRouters();
+
+//                ===========================End New Watch Service======!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!===============
+
+                    System.out.println("do something");
+                System.out.println(
+                        "Event kind:" + event.kind()
+                                + ". File affected: " + event.context() + ".");
+            }
+            key.reset();
+        }
 //        //===========================End of Watch Service============================================
 
     }
@@ -91,9 +166,12 @@ public class Main{
         staticFiles.location("/pages");
         new File("UserFiles").mkdir();
         new File("UserFiles/upload").mkdir();
+        new File("UserFiles/upload/auto").mkdir();
         // create the upload directory if it doesn't exist
         new File("UserFiles/output").mkdir();
+        new File("UserFiles/output/auto").mkdir();
         new File("UserFiles/comboFolder").mkdir();
+        new File("UserFiles/comboFolder/auto").mkdir();
         new File("UserFiles/filteredOutput").mkdir();
         new File("UserFiles/KmlOutput").mkdir();
         usersProcessedFile = new Hashtable<>();
