@@ -7,6 +7,7 @@ import components.Attributes.HashRouters;
 import components.Attributes.WIFISample;
 import components.Attributes.WIFIWeight;
 import components.Attributes.WifiPointsTimePlace;
+import components.CSV_IO.CSVReader;
 import components.CSV_IO.CoboCSVReader;
 import components.CSV_IO.KmlExporter;
 import components.CSV_IO.OutputCSVWriter;
@@ -341,6 +342,61 @@ public class Main{
             WeightedArithmeticMean weightedArithmeticMean = new WeightedArithmeticMean(usersHashRouters.get(req.cookie("user")) );
 
             WIFIWeight ww = weightedArithmeticMean.getWamByList(kLineMostSimilar);
+
+            if (ww!=null){
+                System.out.println(ww.getWIFI_Lat());
+                System.out.println(ww.getWIFI_Lon());
+                System.out.println(ww.getWIFI_Alt());
+
+                Double d = ww.getWIFI_Alt();
+                String[] splitter = d.toString().split("\\.");
+                if (splitter[1].length() <= 1)
+                    return (ww.getWIFI_Lat()+"").substring(0,6)+" ,"+(ww.getWIFI_Lon()+"").substring(0,6)+" ,"+((ww.getWIFI_Alt())+"0")+" ,"+ ww.getWIFI_MAC() ;
+                else
+                    return (ww.getWIFI_Lat()+"").substring(0,6)+" ,"+(ww.getWIFI_Lon()+"").substring(0,6)+" ,"+((ww.getWIFI_Alt())+"").substring(0,6)+" ,"+ ww.getWIFI_MAC();
+            }
+
+            return  "0,0,0";
+
+        });
+
+        get("/submitComboWithQuestionMarksAlgo2", (req, res) ->{
+            if(usersHashRouters.containsKey(req.cookie("user")==null)){
+                throw new Exception("no hash routers");
+            }
+            System.out.println("============================================");
+            String[] queries = req.queryString().split(",");
+
+            //=========================================================
+            ArrayList<WIFIWeight> userInput = new ArrayList<WIFIWeight>();
+
+            ArrayList<WIFIWeight> listOfWIFIWeightsUsingAlgo2 = new ArrayList<>();//Hold locations of all lines of the combination without location CSV File
+
+            //Read the combination-without-location-CSV-File and inserts all line to the ArrayList<ArrayList<WIFIWeight>>.
+            //the innter ArrayList<WIFIWeight> hold one line of combination-without-location-CSV-File. and the external ArrayList hold all of lines.
+            ArrayList<ArrayList<WIFIWeight>> listOfCombinationCsvLines = CSVReader.readCombinationCsvFile("combo.csv");
+            for(ArrayList<WIFIWeight> line : listOfCombinationCsvLines) {
+                //run algorithm 2 on each line, get the WIFIWeight of each line and insert to ArrayList.
+                List<WifiPointsTimePlace> newPFile = usersProcessedFile.get(req.cookie("user"));
+                Algorithm2.getKMostSimilar(newPFile, line, 3);//delete
+                    ArrayList<WIFIWeight> kLineMostSimilar = Algorithm2.getKMostSimilar(usersProcessedFile.get(req.cookie("user")), line, 3);
+                        WeightedArithmeticMean weightedArithmeticMean = new WeightedArithmeticMean(usersHashRouters.get(req.cookie("user")));
+                        WIFIWeight ww = weightedArithmeticMean.getWamByList(kLineMostSimilar);
+
+                        listOfWIFIWeightsUsingAlgo2.add(ww);
+            }
+
+            //Getting all lines of combination-without-location-CSV-File and insert the new locations and export to new file
+            try {
+                List<WifiPointsTimePlace> s = CoboCSVReader.readCsvFile("combo.csv", usersHashRouters.get(req.cookie("user")));
+                OutputCSVWriter.changeLocationOfFile(listOfWIFIWeightsUsingAlgo2,s, "afterAlgo2.csv");
+            }
+            catch (IOException e)
+            {
+            }
+
+            //=========================================================
+            WIFIWeight ww = listOfWIFIWeightsUsingAlgo2.get(0);
 
             if (ww!=null){
                 System.out.println(ww.getWIFI_Lat());
