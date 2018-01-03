@@ -136,6 +136,7 @@ public class WigleFileReader {
 					PointsOfOneMinute.add(wifiSample);		
 				}
 			}
+			allWifiPoints.add(takeTopTenPoints(PointsOfOneMinute));
 			csvFileParser.close();
 		} 
 		catch (Exception e) {

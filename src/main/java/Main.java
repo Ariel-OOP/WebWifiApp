@@ -117,6 +117,7 @@ public class Main{
         });
 
         get("/clearData", (req, res) ->{
+
             File filesToDelete = new File("UserFiles/upload/"+req.cookie("user"));
             //websource:  https://stackoverflow.com/questions/20281835/how-to-delete-a-folder-with-files-using-java
             String[]entries = filesToDelete.list();
@@ -128,17 +129,19 @@ public class Main{
 
             filesToDelete = new File("UserFiles/comboFolder/"+req.cookie("user"));
             entries = filesToDelete.list();
-            for(String s: entries){
-                File currentFile = new File(filesToDelete.getPath(),s);
-                System.out.println("deleted "+currentFile.getName());
-                currentFile.delete();
+            if (filesToDelete.list()!=null) {
+                for (String s : entries) {
+                    File currentFile = new File(filesToDelete.getPath(), s);
+                    System.out.println("deleted " + currentFile.getName());
+                    currentFile.delete();
+                }
             }
 
             //TODO check is this is the solution
 //            usersHashRouters.remove(req.cookie("user"));
 //            usersProcessedFile.remove(req.cookie("user"));
-            usersHashRouters.replace(req.cookie("user"),new HashRouters());
-            usersProcessedFile.replace(req.cookie("user"),new ArrayList<>());
+            usersHashRouters.put(req.cookie("user"),new HashRouters());
+            usersProcessedFile.put(req.cookie("user"),new ArrayList<>());
             processedFile = new ArrayList<>();
             return "deleted uploaded files";
 
@@ -168,6 +171,9 @@ public class Main{
 
 
             //===================================================
+            processedFile = new ArrayList<>();
+            usersHashRouters.put(req.cookie("user"),new HashRouters());
+            usersProcessedFile.put(req.cookie("user"), processedFile);//Because that each time the program read all the files again we need to delete the old files fot dont append the new files on the old files
 
             File comboFiles = new File("UserFiles/comboFolder/"+req.cookie("user"));
 
@@ -188,21 +194,25 @@ public class Main{
                 }
             }
 
-
+            if (usersHashRouters.get(req.cookie("user")) == null)
+                usersHashRouters.put(req.cookie("user"),new HashRouters());
 
 
             //================================================
-             if(file.list().length>0){
+             if(file.list() != null && file.list().length>0){
 //            if(file.list().length>0 || comboFiles.list().length>0){
                 System.out.println("saving to csv output");
-                usersHashRouters.get(req.cookie("user")).mergeToHash(Save2CSV.save2csv("UserFiles/upload/"+req.cookie("user"),"UserFiles/output/"+req.cookie("user")));
+                String userName = req.cookie("user");
+                 System.out.println(userName);
+                 HashRouters<String,WIFISample> temp = usersHashRouters.get(userName);
+                 temp.mergeToHash(Save2CSV.save2csv("UserFiles/upload/"+userName,"UserFiles/output/"+userName));
                 //HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csv("UserFiles/upload/"+req.cookie("user"),"UserFiles/output/"+req.cookie("user"));
-                usersHashRouters.put(req.cookie("user"),usersHashRouters.get(req.cookie("user")));
+                usersHashRouters.put(userName,usersHashRouters.get(userName));
 //                hashRouters = Save2CSV.save2csv("upload/"+req.cookie("user"),"output/"+req.cookie("user"));
 
                 //==========================================added 12-31-17
                 List<File> selectedFiles= new ArrayList<>();
-                File uploads = new File("UserFiles/upload/"+req.cookie("user"));
+                File uploads = new File("UserFiles/upload/"+userName);
                 for(File file2 : uploads.listFiles()){
                     selectedFiles.add(file2);
                 }
@@ -210,14 +220,14 @@ public class Main{
                 OutputCSVWriter outputCSVWriter = new OutputCSVWriter(selectedFiles);
 
                 processedFile.addAll(outputCSVWriter.sortAndMergeFiles());
-                usersProcessedFile.put(req.cookie("user"),processedFile);
-                System.out.println(req.cookie("user"));
+                usersProcessedFile.put(userName,processedFile);
+                System.out.println(userName);
 
                 //==========================================added 12-31-17 - end
-                System.out.println("processed file size:"+ usersProcessedFile.get(req.cookie("user")).size());
-                System.out.println("hash routers file size:"+ usersHashRouters.get(req.cookie("user")).getCountOfRouters());
-                return "true,"+req.cookie("user")+","+usersProcessedFile.get(req.cookie("user")).size()+","
-                        +usersHashRouters.get(req.cookie("user")).getCountOfRouters();
+                System.out.println("processed file size:"+ usersProcessedFile.get(userName).size());
+                System.out.println("hash routers file size:"+ usersHashRouters.get(userName).getCountOfRouters());
+                return "true,"+userName+","+usersProcessedFile.get(userName).size()+","
+                        +usersHashRouters.get(userName).getCountOfRouters();
 //                return "true,nis";
              }else if (comboFiles.list().length>0){
                  System.out.println("saving to csv output");
