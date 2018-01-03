@@ -23,6 +23,8 @@
             <div class="alert alert-info" role="alert">
                 <h4 class="alert-heading">Filters</h4>
                 <hr>
+                <h4 id='displayFilter' class="alert-heading"></h4>
+                <hr>
 
                 <!-- Search box Start -->
                 <form >
@@ -299,6 +301,37 @@
             Cookies.set('logic', '-' , { expires: 600 });
 
         }
+
+
+
+
+        var diplayLogic = Cookies.get('Logic')
+        var displayInput2='';
+        var displayInput1 ='';
+        displayInput1 += Cookies.get('negate1').includes('true') ? '!' : '';
+        if ($("#FilterBySelection :selected").text().includes('Device')) {
+            displayInput1 += '(' + 'Device='+Cookies.get('input1') + ')';
+        }else if ($("#FilterBySelection :selected").text().includes('Location')){
+            displayInput1+= '( ('+$("#inputStartLat").val() + '<=Lat<='+$("#inputEndLat").val()+") & ("+ $("#inputStartLon").val()+"<=Lon<="+ $("#inputEndLon").val()+') )';
+
+        }else if ($("#FilterBySelection :selected").text().includes('Time')){
+            displayInput1+= '( ('+$("#start").val()+"  "+$("#startTime").val() +" <=Time<= "+ $("#end").val()+"  "+$("#endTime").val()+') )';
+        }
+
+        if (Cookies.get('Logic').includes('Choose Logic')) {
+            diplayLogic = '';
+        }else{
+            displayInput2 = Cookies.get('negate2').includes('true') ? '!' : '';
+            if ($("#FilterBySelection2 :selected").text().includes('Device')) {
+                displayInput2 += '(' + 'Device='+Cookies.get('input2') + ')';
+            }else if ($("#FilterBySelection2 :selected").text().includes('Location')){
+                displayInput2+= '( ('+$("#inputStartLat2").val() + '<=Lat<='+$("#inputEndLat2").val()+") & ("+ $("#inputStartLon2").val()+"<=Lon<="+ $("#inputEndLon2").val()+') )';
+
+            }else if ($("#FilterBySelection2 :selected").text().includes('Time')){
+                displayInput2+= '( ('+$("#start2").val()+"  "+$("#startTime2").val() +" <=Time<= "+ $("#end2").val()+"  "+$("#endTime2").val()+') )';
+            }
+        }
+        $("h4#displayFilter").html( displayInput1+diplayLogic+displayInput2);
         $.ajax(
             {
                 "url": encodeURI("/filter")
