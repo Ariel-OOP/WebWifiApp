@@ -471,7 +471,7 @@ public class Main{
             if (!kmlFolder.exists())
                 new File("UserFiles/KmlOutput//"+req.cookie("user")).mkdir();
 
-            KmlExporter kmlExporter = new KmlExporter("UserFiles\\output\\"+req.cookie("user")+"\\OutputCSV.csv","UserFiles\\KmlOutput\\"+req.cookie("user")+"\\KML1.kml");
+            KmlExporter kmlExporter = new KmlExporter("UserFiles\\output\\"+req.cookie("user")+"\\OutputCSV.csv","UserFiles/KmlOutput//"+req.cookie("user")+"//KML1.kml");
             if(kmlExporter.csvToKml(filter) )
                 System.out.println("successful export kml");
             else
