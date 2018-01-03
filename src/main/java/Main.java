@@ -121,10 +121,12 @@ public class Main{
             File filesToDelete = new File("UserFiles/upload/"+req.cookie("user"));
             //websource:  https://stackoverflow.com/questions/20281835/how-to-delete-a-folder-with-files-using-java
             String[]entries = filesToDelete.list();
-            for(String s: entries){
-                File currentFile = new File(filesToDelete.getPath(),s);
-                System.out.println("deleted "+currentFile.getName());
-                currentFile.delete();
+            if(entries != null) {
+                for (String s : entries) {
+                    File currentFile = new File(filesToDelete.getPath(), s);
+                    System.out.println("deleted " + currentFile.getName());
+                    currentFile.delete();
+                }
             }
 
             filesToDelete = new File("UserFiles/comboFolder/"+req.cookie("user"));
@@ -186,7 +188,7 @@ public class Main{
                             if (usersHashRouters.get(req.cookie("user")) == null)
                                 usersHashRouters.put(req.cookie("user"),new HashRouters());
                             processedFile.addAll(CoboCSVReader.readCsvFile(fileInCombo.getPath() + "", usersHashRouters.get(req.cookie("user"))));
-                            usersProcessedFile.put(req.cookie("user"), CoboCSVReader.readCsvFile(fileInCombo.getPath() + "", usersHashRouters.get(req.cookie("user"))));
+                            usersProcessedFile.put(req.cookie("user"), processedFile);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -197,12 +199,12 @@ public class Main{
             if (usersHashRouters.get(req.cookie("user")) == null)
                 usersHashRouters.put(req.cookie("user"),new HashRouters());
 
-
+            String userName = req.cookie("user");
             //================================================
              if(file.list() != null && file.list().length>0){
 //            if(file.list().length>0 || comboFiles.list().length>0){
                 System.out.println("saving to csv output");
-                String userName = req.cookie("user");
+//                String userName = req.cookie("user");
                  System.out.println(userName);
                  HashRouters<String,WIFISample> temp = usersHashRouters.get(userName);
                  temp.mergeToHash(Save2CSV.save2csv("UserFiles/upload/"+userName,"UserFiles/output/"+userName));
@@ -226,49 +228,60 @@ public class Main{
                 //==========================================added 12-31-17 - end
                 System.out.println("processed file size:"+ usersProcessedFile.get(userName).size());
                 System.out.println("hash routers file size:"+ usersHashRouters.get(userName).getCountOfRouters());
-                return "true,"+userName+","+usersProcessedFile.get(userName).size()+","
-                        +usersHashRouters.get(userName).getCountOfRouters();
+
+//                 processedFile = usersProcessedFile.get(userName);
+
+//                OutputCSVWriter.ExportToCSV(usersProcessedFile.get(userName),"UserFiles/output/"+userName+"/testOutputCSV.csv",null);
+//
+//
+//                return "true,"+userName+","+usersProcessedFile.get(userName).size()+","
+//                        +usersHashRouters.get(userName).getCountOfRouters();
 //                return "true,nis";
-             }else if (comboFiles.list().length>0){
-                 System.out.println("saving to csv output");
-                 usersHashRouters.get(req.cookie("user")).mergeToHash(Save2CSV.save2csv("UserFiles/upload/"+req.cookie("user"),"UserFiles/output/"+req.cookie("user")));
-                 //HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csv("UserFiles/upload/"+req.cookie("user"),"UserFiles/output/"+req.cookie("user"));
-                 usersHashRouters.put(req.cookie("user"),usersHashRouters.get(req.cookie("user")));
-//                hashRouters = Save2CSV.save2csv("upload/"+req.cookie("user"),"output/"+req.cookie("user"));
+             }
 
-                 //==========================================added 12-31-17
-                 List<File> selectedFiles= new ArrayList<>();
-                 for(File file2 : comboFiles.listFiles()){
-                     selectedFiles.add(file2);
-                 }
+             OutputCSVWriter.ExportToCSV(usersProcessedFile.get(userName),"UserFiles/output/"+userName+"/OutputCSV.csv",null);
 
-//                 OutputCSVWriter outputCSVWriter = new OutputCSVWriter(selectedFiles);
-                 for (File comboSingleFile : comboFiles.listFiles()){
-                     processedFile.addAll(CoboCSVReader.readCsvFile(comboSingleFile.getPath(),usersHashRouters.get(req.cookie("user"))));
-
-                 }
-
-
-//                 processedFile.addAll(outputCSVWriter.sortAndMergeFiles());
-                 usersProcessedFile.put(req.cookie("user"),processedFile);
-                 System.out.println(req.cookie("user"));
-
-                 //==========================================added 12-31-17 - end
-                 System.out.println("processed file size:"+ usersProcessedFile.get(req.cookie("user")).size());
-                 System.out.println("hash routers file size:"+ usersHashRouters.get(req.cookie("user")).getCountOfRouters());
-                 return "true,"+req.cookie("user")+","+usersProcessedFile.get(req.cookie("user")).size()+","
-                         +usersHashRouters.get(req.cookie("user")).getCountOfRouters();
-//                return "true,nis";
-
-             }else{
-                System.out.println("cannot save to output csv");
-                System.out.println("Directory is empty!");
-                return "false,"+req.cookie("user");
-                }
-
-//            hashRouters = Save2CSV.save2csv();
-
-
+             return "true,"+userName+","+usersProcessedFile.get(userName).size()+","
+                    +usersHashRouters.get(userName).getCountOfRouters();
+//             else if (comboFiles.list().length>0){
+//                 System.out.println("saving to csv output");
+//                 usersHashRouters.get(req.cookie("user")).mergeToHash(Save2CSV.save2csv("UserFiles/upload/"+req.cookie("user"),"UserFiles/output/"+req.cookie("user")));
+//                 //HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csv("UserFiles/upload/"+req.cookie("user"),"UserFiles/output/"+req.cookie("user"));
+//                 usersHashRouters.put(req.cookie("user"),usersHashRouters.get(req.cookie("user")));
+////                hashRouters = Save2CSV.save2csv("upload/"+req.cookie("user"),"output/"+req.cookie("user"));
+//
+//                 //==========================================added 12-31-17
+//                 List<File> selectedFiles= new ArrayList<>();
+//                 for(File file2 : comboFiles.listFiles()){
+//                     selectedFiles.add(file2);
+//                 }
+//
+////                 OutputCSVWriter outputCSVWriter = new OutputCSVWriter(selectedFiles);
+//                 for (File comboSingleFile : comboFiles.listFiles()){
+//                     processedFile.addAll(CoboCSVReader.readCsvFile(comboSingleFile.getPath(),usersHashRouters.get(req.cookie("user"))));
+//
+//                 }
+//
+//
+////                 processedFile.addAll(outputCSVWriter.sortAndMergeFiles());
+//                 usersProcessedFile.put(req.cookie("user"),processedFile);
+//                 System.out.println(req.cookie("user"));
+//
+//                 //==========================================added 12-31-17 - end
+//                 System.out.println("processed file size:"+ usersProcessedFile.get(req.cookie("user")).size());
+//                 System.out.println("hash routers file size:"+ usersHashRouters.get(req.cookie("user")).getCountOfRouters());
+//                 return "true,"+req.cookie("user")+","+usersProcessedFile.get(req.cookie("user")).size()+","
+//                         +usersHashRouters.get(req.cookie("user")).getCountOfRouters();
+////                return "true,nis";
+//
+//             }
+//             else{
+//                System.out.println("cannot save to output csv");
+//                System.out.println("Directory is empty!");
+//                return "false,"+req.cookie("user");
+//                }
+//
+////            hashRouters = Save2CSV.save2csv();
 
         });
 
@@ -289,9 +302,9 @@ public class Main{
                 Double d = ww.getWIFI_Alt();
                 String[] splitter = d.toString().split("\\.");
                 if (splitter[1].length() <= 1)
-                    return (ww.getWIFI_Lat()+"").substring(0,6)+" ,"+(ww.getWIFI_Lon()+"").substring(0,6)+" ,"+((ww.getWIFI_Alt())+"0")+" ,"+ ww.getWIFI_MAC() ;
+                    return (ww.getWIFI_Lat()+"").substring(0,8)+" ,"+(ww.getWIFI_Lon()+"").substring(0,8)+" ,"+((ww.getWIFI_Alt())+"0")+" ,"+ ww.getWIFI_MAC() ;
                 else
-                    return (ww.getWIFI_Lat()+"").substring(0,6)+" ,"+(ww.getWIFI_Lon()+"").substring(0,6)+" ,"+((ww.getWIFI_Alt())+"").substring(0,6)+" ,"+ ww.getWIFI_MAC();
+                    return (ww.getWIFI_Lat()+"").substring(0,8)+" ,"+(ww.getWIFI_Lon()+"").substring(0,8)+" ,"+((ww.getWIFI_Alt())+"").substring(0,8)+" ,"+ ww.getWIFI_MAC();
             }
 //            return bootstrapCSV();
 //            return "Lat is: "+(ww.getWIFI_Lat()+"").substring(0,6)+"  ,Lon is: "+(ww.getWIFI_Lon()+"").substring(0,6)+"  ,Alt is: "+(ww.getWIFI_Alt()+"").substring(0,6) ;
@@ -313,16 +326,16 @@ public class Main{
             userInput.add(new WIFIWeight(queries[1],0,0,0,Integer.parseInt(queries[4]),0));
             userInput.add(new WIFIWeight(queries[2],0,0,0,Integer.parseInt(queries[5]),0));
 
-            List<File> selectedFiles= new ArrayList<>();
-            File uploads = new File("UserFiles/upload");
-            for(File file : uploads.listFiles()){
-                selectedFiles.add(file);
-            }
-
-            OutputCSVWriter outputCSVWriter = new OutputCSVWriter(selectedFiles);
-
-            //processedFile =  outputCSVWriter.sortAndMergeFiles();
-            usersProcessedFile.put(req.cookie("user"),outputCSVWriter.sortAndMergeFiles());
+//            List<File> selectedFiles= new ArrayList<>();
+//            File uploads = new File("UserFiles/upload");
+//            for(File file : uploads.listFiles()){
+//                selectedFiles.add(file);
+//            }
+//
+//            OutputCSVWriter outputCSVWriter = new OutputCSVWriter(selectedFiles);
+//
+//            //processedFile =  outputCSVWriter.sortAndMergeFiles();
+//            usersProcessedFile.put(req.cookie("user"),outputCSVWriter.sortAndMergeFiles());
 
             List<WIFIWeight> kLineMostSimilar = Algorithm2.getKMostSimilar(usersProcessedFile.get(req.cookie("user")), userInput, 3);
 
