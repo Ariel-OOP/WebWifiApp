@@ -14,10 +14,10 @@ login into username auto for automatic updating feature.
 
 # Almost done explainig,
 
-Login in to your user account to keep changes.
-Those changes and uploads are stored in the UserFiles folder.
-In the UserFiles folder there are multiple folders.
-	1- upload - the upload folder contains what a folder that has been uploaded by the user.
-	2 - comboFolder - the upload folder contains what has been uploaded by the user.
-	3 - output - is the csv that is created without filters
-	4 - filteredOutput - is the csv that 
+Login in to your user account to keep changes.<br>
+Those changes and uploads are stored in the UserFiles folder.<br>
+In the UserFiles folder there are multiple folders.<br><br>
+	 1- upload - the upload folder contains what a folder that has been uploaded by the user.<br>
+	 2 - comboFolder - the upload folder contains what has been uploaded by the user.<br>
+	 3 - output - is the csv that is created without filters<br>
+	 4 - filteredOutput - is the csv that is filtered <br>
