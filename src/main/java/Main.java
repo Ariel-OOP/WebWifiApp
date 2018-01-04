@@ -260,6 +260,7 @@ public class Main{
             HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csvWithPredicate(usersProcessedFile.get(name)
                     ,"UserFiles/filteredOutput/"+name,finalPredicate);
 
+
             usersHashRouters.put(name,currnetHashRouter);
             System.out.println("finished restoring filter");
             System.out.println(usersProcessedFile.get(name).size()+","
