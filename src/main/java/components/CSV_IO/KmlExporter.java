@@ -154,7 +154,7 @@ public class KmlExporter {
 
     private static String colorOfPoint(String str) {
 
-        int RXLnumber = Integer.parseInt(str);
+        int RXLnumber = (int)(Double.parseDouble(str));
         String color = "";
 
         if(RXLnumber <= 0 && RXLnumber > -70)
