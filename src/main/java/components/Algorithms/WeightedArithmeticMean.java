@@ -32,8 +32,8 @@ public class WeightedArithmeticMean {
     public WIFIWeight getWAMbyMac(String mac) {
         //the last argument is the comparator
         List<WIFISample> kMacList = hashRouters.getKBest(mac,k, (x,y)->{
-            int xi = Integer.valueOf(x.getWIFI_RSSI());
-            int yi = Integer.valueOf(y.getWIFI_RSSI());
+            int xi = (int)(Double.parseDouble(x.getWIFI_RSSI()));
+            int yi = (int)(Double.parseDouble(y.getWIFI_RSSI()));
             return yi-xi;
         });
 
@@ -49,7 +49,7 @@ public class WeightedArithmeticMean {
                     ,calcWeight(ws.getWIFI_Lat(),weightOfOne )
                     ,calcWeight(ws.getWIFI_Lon(),weightOfOne )
                     ,calcWeight(ws.getWIFI_Alt(),weightOfOne)
-                    ,Integer.parseInt(ws.getWIFI_RSSI())
+                    ,(int)(Double.parseDouble(ws.getWIFI_RSSI()))
                     ,weightOfOne ));
 
         }
