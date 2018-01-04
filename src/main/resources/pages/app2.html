@@ -10,6 +10,7 @@
             crossorigin="anonymous">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.js"></script>
+    <script src="https://fastcdn.org/Cookies.js/1.2.2/cookies.min.js"></script>
 
     <meta charset="utf-8">
     <title>Wigle WIFI extracter</title>
@@ -35,7 +36,9 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a class="menuLink" href="app2.html#algo1Anchor"><span class="glyphicon glyphicon-signal"></span> Algo 1</a>
+                <li><a class="menuLink" href="#filterAnchor"><span class="glyphicon glyphicon-signal"></span> Filter</a>
+                </li>
+                <li><a class="menuLink" href="#algo1Anchor"><span class="glyphicon glyphicon-signal"></span> Algo 1</a>
                 </li>
                 <li><a class="menuLink" href="#algo2Anchor"><span class="glyphicon glyphicon-map-marker"></span> Algo 2</a>
                 </li>
@@ -163,6 +166,154 @@
     </div>
 
 
+    <a id="filterAnchor"></a>
+    <div class="row">
+        <div class="col-lg">
+
+            <div class="alert alert-info" role="alert">
+                <h4 class="alert-heading">Filters</h4>
+                <hr>
+                <h4 id='displayFilter' class="alert-heading"></h4>
+                <hr>
+
+                <!-- Search box Start -->
+                <form >
+                    <div class="form-row align-items-center">
+                        <div class="col-lg-6 col-md-3 col-sm-5">
+                            <label class="mr-sm-2" for="inlineFormCustomSelect">Filter</label>
+                            <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="FilterBySelection">
+                                <option selected>Choose Filter</option>
+                                <option value="1">Time</option>
+                                <option value="2">Location</option>
+                                <option value="3">Device</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-6 col-md-3 col-sm-5">
+                            <label class="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">
+                                <input type="checkbox" class="custom-control-input" id="NegateInput1">
+                                <span class="custom-control-indicator"></span>
+                                <span class="custom-control-description">Negate</span>
+                            </label>
+                        </div>
+
+
+                        <div class="col-auto">
+                            <label class="mr-sm-2" for="inlineFormCustomSelect"></label>
+                            <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="FilterByLogic">
+                                <option selected>Choose Logic</option>
+                                <option value="1">And</option>
+                                <option value="2">Or</option>
+                            </select>
+                        </div>
+
+
+
+                    </div>
+                </form>
+                <!-- Search box End -->
+
+                <hr>
+                <div class="btn-group">
+                    <button type="button" id="btnAddFilter" class="btn btn-primary">+</button>
+                    <button type="button" id="btnFilterSumbit" class="btn btn-primary">Filter</button>
+                    <button type="button" id="btnSaveFilter" class="btn btn-primary">Save Filter</button>
+                    <button type="button" id="btnClearFilter" class="btn btn-primary">Clear Filter</button>
+                </div>
+
+                <!-- Input boxes -->
+                <hr>
+                <div id="inputDeviceDiv">
+                    <input type="text" id="inputDevice" placeholder="device" class="inputFilter">
+                </div>
+
+                <div id="inputTimeDiv">
+
+                    <input id="start" class="inputStyle" type="date" name="bday" value="2017-05-05" onchange="myFunction()" max=>
+                    Enter start time:<br>
+                    <input type="time" class="inputStyle" id="startTime" step="1" value="20:00:00">
+
+                    <br><br>
+                    Enter end date:<br>
+                    <input id="end"  class="inputStyle" type="date" name="bday" value="2017-05-05">
+                    Enter end time:<br>
+                    <input type="time" class="inputStyle" id="endTime" step="1" value="20:00:00">”
+
+                </div>
+
+                <div id="inputLocationeDiv">
+                    <input type="text" id="inputStartLat" placeholder="start lat" class="inputFilter">
+                    <input type="text" id="inputStartLon" placeholder="start lon" class="inputFilter">
+                    <hr>
+                    <input type="text" id="inputEndLat" placeholder="end lat" class="inputFilter">
+                    <input type="text" id="inputEndLon" placeholder="end lon" class="inputFilter">
+                </div>
+
+
+
+                <!-- Selection filter 2 -->
+
+
+
+                <div id="inputFilter2">
+                    <hr>
+                    <h2>Filter 2</h2>
+                    <hr>
+                    <form >
+                        <div class="form-row align-items-center">
+                            <div class="col-lg-6 col-md-3 col-sm-5">
+                                <label class="mr-sm-2" for="inlineFormCustomSelect">Filter</label>
+                                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="FilterBySelection2">
+                                    <option selected>Choose Filter</option>
+                                    <option value="1">Time</option>
+                                    <option value="2">Location</option>
+                                    <option value="3">Device</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-6 col-md-3 col-sm-5">
+                                <label class="custom-control custom-checkbox mb-2 mr-sm-2 mb-sm-0">
+                                    <input type="checkbox" class="custom-control-input" id="NegateInput2">
+                                    <span class="custom-control-indicator"></span>
+                                    <span class="custom-control-description">Negate</span>
+                                </label>
+                            </div>
+                        </div>
+                    </form >
+
+                    <!-- Input boxes filter 2 -->
+
+                    <hr>
+                    <div id="inputDeviceDiv2">
+                        <input type="text" id="inputDevice2" placeholder="device 2" class="inputFilter2">
+                    </div>
+
+                    <div id="inputTimeDiv2">
+                        <input id="start2" class="inputStyle" type="date" name="bday" value="2017-05-05" onchange="myFunction()" max=>
+                        Enter start time:<br>
+                        <input type="time" class="inputStyle" id="startTime2" step="1" value="20:00:00">
+
+                        <br><br>
+                        Enter end date:<br>
+                        <input id="end2"  class="inputStyle" type="date" name="bday" value="2017-05-05">
+                        Enter end time:<br>
+                        <input type="time" class="inputStyle" id="endTime2" step="1" value="20:00:00">”
+
+                    </div>
+
+                    <div id="inputLocationeDiv2">
+                        <input type="text" id="inputStartLat2" placeholder="start lat 2" class="inputFilter2">
+                        <input type="text" id="inputStartLon2" placeholder="start lon 2" class="inputFilter2">
+                        <hr>
+                        <input type="text" id="inputEndLat2" placeholder="end lat 2" class="inputFilter2">
+                        <input type="text" id="inputEndLon2" placeholder="end lon 2" class="inputFilter2">
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
     <a id="algo1Anchor"></a>
     <div class="jumbotron">
         <div class="row">
@@ -206,10 +357,15 @@
 
     <div class="jumbotron">
         <div class="row">
-            <div class="col-lg-4 col-md-3 col-sm-4">
+            <div class="col-lg-5 col-md-3 col-sm-4">
                 <h4>Algo 2</h4>
                 Calculates the weighted arithmic mean of the mac
                 entered.
+            </div>
+            <div class="col-lg-4 col-md-3 col-sm-4">
+                <h4>Combo</h4>
+                Enter Combo line into the text box press
+                Combo??? and get result.
             </div>
 
         </div>
@@ -246,8 +402,18 @@
         </span>
                 </div><br>
             </div>
+            <!-- combo text input-->
+            <div class="col-lg-3 col-md-3 col-sm-3">
+                <br>
+                <div class="input-group input-group-lg">
+                    <input id="comboTextInput" type="text" class="form-control" placeholder="Combo Text" value="">
+                    <span class="input-group-btn">
+          <button id="submitComboWithQuestionMarksAlgo2" class="btn btn-default" type="button" name="button">Combo ???</button>
+        </span>
+                </div><br>
+            </div>
 
-            <div class="col-lg-5 col-md-3 col-sm-6">
+            <div class="col-lg-4 col-md-3 col-sm-6">
                 <canvas id="myChartAlgo2" width="200" height="200"></canvas>
 
             </div>
@@ -513,6 +679,43 @@
 
         <!-------------------end of algo 2-------------------------->
 
+        <!-------------------start of combo ???-------------------------->
+
+        $("button#submitComboWithQuestionMarksAlgo2").click(() => {
+            var comboInput  = $("input#comboTextInput").val();
+        $.ajax(
+            {
+                "url": encodeURI("/submitComboWithQuestionMarksAlgo2?" +comboInput )
+            }
+        ).then(
+            function(output) {
+                var splitOutput = output.split(",");
+
+                new Chart(document.getElementById("myChartAlgo2"),
+                    {"type":"bubble","data":{"datasets":[{"label":"Wifi Points",
+                        "data":[{"x":31,"y":30,"r":5},{"x":parseFloat(splitOutput[0]),"y":parseFloat(splitOutput[1]),"r":10},{"x":30,"y":33,"r":5},{"x":33,"y":36,"r":5}],
+                        "backgroundColor":"rgb(255, 99, 132)"}]}});
+
+
+            <!--------------append wifi point to table--------------------------->
+                var tableColor;
+                var iterationTable= incrTable();
+                if (iterationTable%2==1){
+                    tableColor='danger';
+                }else {
+                    tableColor ='info';
+                }
+                var tr = "<tr class="+tableColor+"><td>"+splitOutput[3]+"</td><td>"
+                    +splitOutput[0]+"</td><td>"+splitOutput[1]+"</td><td>"+splitOutput[2]+"</td></tr>"
+                $('table#algo2Table').append(tr);
+            <!--------------end of appending table--------------------------->
+            }
+        );
+        return false
+        })
+
+        <!-------------------end of submit combo ???-------------------------->
+
         <!--start of save to kml -->
 
 
@@ -542,6 +745,354 @@
         });
 
 
+    </script>
+
+
+
+
+
+
+    <script>
+        <!-- On load hide -->
+        $( document ).ready(function() {
+            $("div#inputTimeDiv").hide();
+            $("div#inputLocationeDiv").hide();
+            $("div#inputDeviceDiv").hide();
+            $("select#FilterByLogic").hide();
+            $("div#inputFilter2").hide();
+            $("div#inputTimeDiv2").hide();
+            $("div#inputLocationeDiv2").hide();
+            $("div#inputDeviceDiv2").hide();
+            $("select#FilterByLogic2").hide();
+        });
+        <!-- hide and show appropriate Input boxes filter 1 -->
+        $("#FilterBySelection").click(function(){
+            var selText = $(this).text();
+            $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+            if ($("#FilterBySelection :selected").text().includes('Device')){
+                $("div#inputDeviceDiv").show();
+                $("select#FilterByLogic").show();
+                $("div#inputTimeDiv").hide();
+                $("div#inputLocationeDiv").hide();
+            }else if ($("#FilterBySelection :selected").text().includes('Location')){
+                $("div#inputLocationeDiv").show();
+                $("select#FilterByLogic").show();
+                $("div#inputTimeDiv").hide();
+                $("div#inputDeviceDiv").hide();
+            }else if ($("#FilterBySelection :selected").text().includes('Time')) {
+                $("div#inputTimeDiv").show();
+                $("select#FilterByLogic").show();
+                $("div#inputLocationeDiv").hide();
+                $("div#inputDeviceDiv").hide();
+            }
+        });
+        <!-- hide and show appropriate Input boxes filter 2 -->
+        $("#FilterBySelection2").click(function(){
+            var selText = $(this).text();
+            $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+            if ($("#FilterBySelection2 :selected").text().includes('Device')){
+                $("div#inputDeviceDiv2").show();
+                $("select#FilterByLogic2").show();
+                $("div#inputTimeDiv2").hide();
+                $("div#inputLocationeDiv2").hide();
+            }else if ($("#FilterBySelection2 :selected").text().includes('Location')){
+                $("div#inputLocationeDiv2").show();
+                $("select#FilterByLogic2").show();
+                $("div#inputTimeDiv2").hide();
+                $("div#inputDeviceDiv2").hide();
+            }else if ($("#FilterBySelection2 :selected").text().includes('Time')) {
+                $("div#inputTimeDiv2").show();
+                $("select#FilterByLogic2").show();
+                $("div#inputLocationeDiv2").hide();
+                $("div#inputDeviceDiv2").hide();
+            }
+        });
+        <!-- Input boxes -->
+        $("#btnAddFilter").click(function(){
+            $("div#inputTimeDiv").hide();
+            $("div#inputLocationeDiv").hide();
+            $("div#inputDeviceDiv").hide();
+            $("select#FilterByLogic").hide();
+        });
+        <!-- Submit Filter -->
+        $("#btnFilterSumbit").click(function(){
+            <!-- Submit Device Filter -->
+            sessionStorage.clear();
+            sessionStorage.setItem('Logic', $("#FilterByLogic :selected").text() );
+            Cookies.set('filter1', $("#FilterBySelection :selected").text() , { expires: 600 });
+            Cookies.set('filter2', $("#FilterBySelection2 :selected").text() , { expires: 600 });
+            Cookies.set('Logic', $("#FilterByLogic :selected").text() , { expires: 600 });
+            Cookies.set('negate1', $("#NegateInput1").is(":checked") , { expires: 600 });
+            if ($("#FilterBySelection :selected").text().includes('Device')){
+                if ($("#inputDevice").val().length === 0){
+                    alert("you forgot to input");
+                    return;
+                }else{
+                    sessionStorage.setItem('inputDevice1', $("#inputDevice").val() );
+                    Cookies.set('input1', $("#inputDevice").val() , { expires: 600 });
+                }
+                <!-- Submit Location Filter -->
+            }else if ($("#FilterBySelection :selected").text().includes('Location')){
+                Cookies.set('input1', $("#inputStartLat").val() +"&"+ $("#inputStartLon").val()+"&"+ $("#inputEndLat").val()+"&"+ $("#inputEndLon").val(), { expires: 600 });
+            }<!-- Submit Time Filter -->
+            else if ($("#FilterBySelection :selected").text().includes('Time')) {
+                Cookies.set('input1', $("#start").val()+"T"+$("#startTime").val() +"&"+ $("#end").val()+"T"+$("#endTime").val() , { expires: 600 });
+            }
+            if (!$("#FilterByLogic :selected").text().includes('Choose Logic')){
+                <!-- if choose second filter -->
+                Cookies.set('negate2', $("#NegateInput2").is(":checked") , { expires: 600 });
+                if ($("#FilterBySelection2 :selected").text().includes('Device')){
+                    if ($("#inputDevice2").val().length === 0){
+                        alert("you forgot to input");
+                        return;
+                    }else{
+                        sessionStorage.setItem('inputDevice1', $("#inputDevice2").val() );
+                        Cookies.set('input2', $("#inputDevice2").val() , { expires: 600 });
+                    }
+                    <!-- Submit Location Filter -->
+                }else if ($("#FilterBySelection2 :selected").text().includes('Location')){
+                    Cookies.set('input2', $("#inputStartLat2").val() +"&"+ $("#inputStartLon2").val()+"&"+ $("#inputEndLat2").val()+"&"+ $("#inputEndLon2").val(), { expires: 600 });
+                }<!-- Submit Time Filter -->
+                else if ($("#FilterBySelection2 :selected").text().includes('Time')) {
+                    Cookies.set('input2', $("#start2").val()+"T"+$("#startTime2").val() +"&"+ $("#end2").val()+"T"+$("#endTime2").val() , { expires: 600 });
+                }
+            }
+            else if ($("#FilterByLogic :selected").text().includes('Choose Logic')){
+                Cookies.set('input2', '' , { expires: 600 });
+                Cookies.set('filter2', '' , { expires: 600 });
+                Cookies.set('logic', '-' , { expires: 600 });
+            }
+            var diplayLogic = Cookies.get('Logic')
+            var displayInput2='';
+            var displayInput1 ='';
+            displayInput1 += Cookies.get('negate1').includes('true') ? '!' : '';
+            if ($("#FilterBySelection :selected").text().includes('Device')) {
+                displayInput1 += '(' + 'Device='+Cookies.get('input1') + ')';
+            }else if ($("#FilterBySelection :selected").text().includes('Location')){
+                displayInput1+= '( ('+$("#inputStartLat").val() + '<=Lat<='+$("#inputEndLat").val()+") & ("+ $("#inputStartLon").val()+"<=Lon<="+ $("#inputEndLon").val()+') )';
+            }else if ($("#FilterBySelection :selected").text().includes('Time')){
+                displayInput1+= '( ('+$("#start").val()+"  "+$("#startTime").val() +" <=Time<= "+ $("#end").val()+"  "+$("#endTime").val()+') )';
+            }
+            if (Cookies.get('Logic').includes('Choose Logic')) {
+                diplayLogic = '';
+            }else{
+                displayInput2 = Cookies.get('negate2').includes('true') ? '!' : '';
+                if ($("#FilterBySelection2 :selected").text().includes('Device')) {
+                    displayInput2 += '(' + 'Device='+Cookies.get('input2') + ')';
+                }else if ($("#FilterBySelection2 :selected").text().includes('Location')){
+                    displayInput2+= '( ('+$("#inputStartLat2").val() + '<=Lat<='+$("#inputEndLat2").val()+") & ("+ $("#inputStartLon2").val()+"<=Lon<="+ $("#inputEndLon2").val()+') )';
+                }else if ($("#FilterBySelection2 :selected").text().includes('Time')){
+                    displayInput2+= '( ('+$("#start2").val()+"  "+$("#startTime2").val() +" <=Time<= "+ $("#end2").val()+"  "+$("#endTime2").val()+') )';
+                }
+            }
+            $("h4#displayFilter").html( displayInput1+diplayLogic+displayInput2);
+            $.ajax(
+                {
+                    "url": encodeURI("/filter")
+                }
+            ).then(
+                function(output) {
+                    var n = output.includes("true");
+                    var userNameOutput = output.split(",");
+                    $('div#filePopup').show();
+                    if(n==true){
+                        $("h4#filePopupMsg").html("saved "+ userNameOutput[1]);
+                        $("h3#NumberOfLines").html(""+ userNameOutput[2]);
+                        console.log("NumberOfLines:"+userNameOutput[2]);
+                        $("h3#NumberOfMACS").html(""+ userNameOutput[3]);
+                        console.log("NumberOfMACS:"+userNameOutput[3]);
+
+                    }
+                    else
+                        $("h4#filePopupMsg").html("Can't save no files, try loading some files dimwit.")
+
+                }
+            );
+            return false
+
+        });
+        <!-- Save Filter -->
+        $("#btnSaveFilter").click(function(){
+            <!-- Submit Device Filter -->
+            sessionStorage.clear();
+            sessionStorage.setItem('Logic', $("#FilterByLogic :selected").text() );
+            Cookies.set('filter1', $("#FilterBySelection :selected").text() , { expires: 600 });
+            Cookies.set('filter2', $("#FilterBySelection2 :selected").text() , { expires: 600 });
+            Cookies.set('Logic', $("#FilterByLogic :selected").text() , { expires: 600 });
+            Cookies.set('negate1', $("#NegateInput1").is(":checked") , { expires: 600 });
+            if ($("#FilterBySelection :selected").text().includes('Device')){
+                if ($("#inputDevice").val().length === 0){
+                    alert("you forgot to input");
+                    return;
+                }else{
+                    sessionStorage.setItem('inputDevice1', $("#inputDevice").val() );
+                    Cookies.set('input1', $("#inputDevice").val() , { expires: 600 });
+                }
+                <!-- Submit Location Filter -->
+            }else if ($("#FilterBySelection :selected").text().includes('Location')){
+                Cookies.set('input1', $("#inputStartLat").val() +"&"+ $("#inputStartLon").val()+"&"+ $("#inputEndLat").val()+"&"+ $("#inputEndLon").val(), { expires: 600 });
+            }<!-- Submit Time Filter -->
+            else if ($("#FilterBySelection :selected").text().includes('Time')) {
+                Cookies.set('input1', $("#start").val()+"T"+$("#startTime").val() +"&"+ $("#end").val()+"T"+$("#endTime").val() , { expires: 600 });
+            }
+            if (!$("#FilterByLogic :selected").text().includes('Choose Logic')){
+                <!-- if choose second filter -->
+                Cookies.set('negate2', $("#NegateInput2").is(":checked") , { expires: 600 });
+                if ($("#FilterBySelection2 :selected").text().includes('Device')){
+                    if ($("#inputDevice2").val().length === 0){
+                        alert("you forgot to input");
+                        return;
+                    }else{
+                        sessionStorage.setItem('inputDevice1', $("#inputDevice2").val() );
+                        Cookies.set('input2', $("#inputDevice2").val() , { expires: 600 });
+                    }
+                    <!-- Submit Location Filter -->
+                }else if ($("#FilterBySelection2 :selected").text().includes('Location')){
+                    Cookies.set('input2', $("#inputStartLat2").val() +"&"+ $("#inputStartLon2").val()+"&"+ $("#inputEndLat2").val()+"&"+ $("#inputEndLon2").val(), { expires: 600 });
+                }<!-- Submit Time Filter -->
+                else if ($("#FilterBySelection2 :selected").text().includes('Time')) {
+                    Cookies.set('input2', $("#start2").val()+"T"+$("#startTime2").val() +"&"+ $("#end2").val()+"T"+$("#endTime2").val() , { expires: 600 });
+                }
+            }
+            else if ($("#FilterByLogic :selected").text().includes('Choose Logic')){
+                Cookies.set('input2', '' , { expires: 600 });
+                Cookies.set('filter2', '' , { expires: 600 });
+                Cookies.set('logic', '-' , { expires: 600 });
+            }
+            $.ajax(
+                {
+                    "url": encodeURI("/saveFilter")
+                }
+            ).then(
+                function(output) {
+                }
+            );
+        });
+        <!-- input Filter 2 -->
+        $("#FilterByLogic").click(function(){
+            var selText = $(this).text();
+            $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+            if ($("#FilterByLogic :selected").text().includes('And')){
+                $("div#inputFilter2").show();
+            }else if ($("#FilterByLogic :selected").text().includes('Or')){
+                $("div#inputFilter2").show();
+            }else if ($("#FilterByLogic :selected").text().includes('Choose Logic')) {
+                $("div#inputFilter2").hide();
+            }
+        });
+        <!-- date picker -->
+        <!-- time picker sources: Reut and Inon-->
+        // applay the dates filter
+        $("button#applyDate").click(function() {
+            var input1 = $("input#start").val();
+            var input11= $("input#startTime").val();
+            var input2 = $("input#end").val();
+            var input22= $("input#endTime").val();
+            var final= input1+" "+ input11+"  to    "+ input2+" "+input22;
+            console.log("filter 1:"+final+"");
+            console.log("start:"+$("input#start").val());
+            console.log("start time :"+$("input#startTime").val());
+            $("input#start").val()+'T'+$("input#startTime").val();
+        });
+        $('#start').on("change", function(){
+            $(this).attr('value', $('#start').val());
+            $('#end').attr('min', $('#start').val());
+            $('#end').attr('value', $('#start').val());
+        });
+        $('#end').on("change", function(){
+            if($('#start').val()>$('#end').val()){
+                $('#start').attr('value', $('#end').val());
+            }
+            $(this).attr('value', $('#end').val());
+            $('#end').attr('min', $('#start').val());
+            $('#start').attr('max', $('#end').val());
+            if($('#start').val()==$('#end').val()){
+                $('#endTime').attr('min', $('#startTime').val());
+                $('#startTime').attr('max', $('#endTime').val());
+            }
+        });
+        $('#startTime').on("change", function(){
+            if($('#start').val()==$('#end').val()){
+                if($('#startTime').val()>$('#endTime').val())
+                    $('#endTime').attr('value', $('#startTime').val());
+            }
+        });
+        $('#endTime').on("change", function(){
+            if($('#start').val()==$('#end').val()){
+                if($('#endTime').val()<$('#startTime').val()){
+                    $('#startTime').attr('value', $('#endTime').val());
+                }
+            }
+        });
+        <!-- date picker 2-->
+        <!-- time picker sources: Reut and Inon-->
+        // applay the dates filter
+        $("button#applyDate").click(function() {
+            var input1 = $("input#start2").val();
+            var input11= $("input#startTime2").val();
+            var input2 = $("input#end2").val();
+            var input22= $("input#endTime2").val();
+            var final= input1+" "+ input11+"  to    "+ input2+" "+input22;
+            console.log("filter 1:"+final+"");
+            console.log("start:"+$("input#start2").val());
+            console.log("start time :"+$("input#startTime2").val());
+            $("input#start").val()+'T'+$("input#startTime2").val();
+        });
+        $('#start2').on("change", function(){
+            $(this).attr('value', $('#start2').val());
+            $('#end2').attr('min', $('#start2').val());
+            $('#end2').attr('value', $('#start2').val());
+        });
+        $('#end2').on("change", function(){
+            if($('#start2').val()>$('#end2').val()){
+                $('#start2').attr('value', $('#end2').val());
+            }
+            $(this).attr('value', $('#end2').val());
+            $('#end2').attr('min', $('#start2').val());
+            $('#start2').attr('max', $('#end2').val());
+            if($('#start2').val()==$('#end2').val()){
+                $('#endTime2').attr('min', $('#startTime2').val());
+                $('#startTime2').attr('max', $('#endTime2').val());
+            }
+        });
+        $('#startTime2').on("change", function(){
+            if($('#start2').val()==$('#end2').val()){
+                if($('#startTime2').val()>$('#endTime2').val())
+                    $('#endTime2').attr('value', $('#startTime2').val());
+            }
+        });
+        $('#endTime2').on("change", function(){
+            if($('#start2').val()==$('#end2').val()){
+                if($('#endTime2').val()<$('#startTime2').val()){
+                    $('#startTime2').attr('value', $('#endTime2').val());
+                }
+            }
+        });
+        <!-- Clear Filter-->
+        $("button#btnClearFilter").click(() => {
+            alert("will clear filter");
+        $.ajax(
+            {
+                "url": encodeURI("/save2csv")
+            }
+        ).then(
+            function(output) {
+                var n = output.includes("true");
+                var userNameOutput = output.split(",");
+                $('div#filePopup').show();
+                if(n==true){
+                    $("h4#filePopupMsg").html("saved "+ userNameOutput[1]);
+                    $("h3#NumberOfLines").html(""+ userNameOutput[2]);
+                    console.log("NumberOfLines:"+userNameOutput[2]);
+                    $("h3#NumberOfMACS").html(""+ userNameOutput[3]);
+                    console.log("NumberOfMACS:"+userNameOutput[3]);
+                }
+                else
+                    $("h4#filePopupMsg").html("Can't save no files, try loading some files dimwit.")
+            }
+        );
+        return false
+        })
     </script>
 
 </body>

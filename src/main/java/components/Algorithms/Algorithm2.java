@@ -27,14 +27,16 @@ public class Algorithm2 {
 
         //kSimilar = Arrays.stream(kSimilar).map((x) -> x = new WIFIWeight("",0,0,0,0,0));
 
+        int p = 0;
         for (WifiPointsTimePlace line : FinalCSV)
         {
+            p++;
             wifiWeightOfOneLine = line.checkSimilarity(inputFromUser);
 
             //Try to insert the new wifiWeightOfOneLine into the array of k most similar. //enterToArrayOfKSimilar(kSimilar,wifiWeightOfOneLine);
             WIFIWeight cotterntWifiWight = wifiWeightOfOneLine;
             WIFIWeight temp;
-
+            int numberOfLines = kSimilar.length;
             for(int i = 0; i < kSimilar.length; i++)
             {
                 if(kSimilar[i].getWIFI_Weight() < cotterntWifiWight.getWIFI_Weight())

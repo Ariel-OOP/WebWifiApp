@@ -10,7 +10,7 @@ public class DevicePredicate implements Predicate<WifiPointsTimePlace> {
 
     public DevicePredicate(String device) {
 
-        this.device = device;
+        this.device = device.replace("%20"," ");
     }
     public String getDevice() {
         return device;

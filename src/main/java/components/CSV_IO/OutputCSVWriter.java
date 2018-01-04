@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+/**
+* @author Moshe
+*/
+
 public class OutputCSVWriter {
 
 	//Delimiter used in CSV file
@@ -33,14 +37,12 @@ public class OutputCSVWriter {
 	HashRouters<String,WIFISample> allRoutersOfTheFiles;
 
 	/**
-	 * 
-	 * @param files the file destination to output the file and name
+	 * @param files - List of files that the class will process.
 	 */
 
 	public OutputCSVWriter(List<File> files) {
 		this.files = files;
 		//this.outputPath = outputPath;
-
 
 		allRoutersOfTheFiles = new HashRouters<>();
 
@@ -49,6 +51,14 @@ public class OutputCSVWriter {
 //		fileToDelete.delete();
 
 	}
+
+	/**
+	 * The function process all the lines in a 'files' variable, and create a list and a hash Table.
+	 * The list contains all lines that appear in the final CSV.
+	 * The Hash table contains for each MAC address a list of objects (of the type WIFISample) that each object contains
+	 * 		information about once that the MAC address is in the final CSV file.
+	 * @return the list that contains all lines that appear in the final CSV.
+	 */
 	public List<WifiPointsTimePlace> sortAndMergeFiles() {
 		List<WifiPointsTimePlace> allSortedPoints = new ArrayList<>(); //from all the files together
 		List<WifiPointsTimePlace> processedFile = new ArrayList<>();
@@ -56,17 +66,49 @@ public class OutputCSVWriter {
 
 		for (File file : files) {
 
-				wigleFileReader = new WigleFileReader(file.getPath());
-				wigleFileReader.readCsvFile();
+			wigleFileReader = new WigleFileReader(file.getPath());
+			wigleFileReader.readCsvFile();
 
-				allRoutersOfTheFiles.mergeToHash(wigleFileReader.getHashRouters());
+			allRoutersOfTheFiles.mergeToHash(wigleFileReader.getHashRouters());
 
-				//allSortedPoints = wigleFileReader.getWigleList();
-				processedFile.addAll(wigleFileReader.getWigleList());
+			//allSortedPoints = wigleFileReader.getWigleList();
+			processedFile.addAll(wigleFileReader.getWigleList());
 		}
 		return processedFile;
 	}
 
+	/**
+	 * The function gets:
+	 * @param listOfLocatins - list of new locations for ALL lines of the source file.
+	 * @param allLinesOfSourceFile - list of all lines in the sourcefile by type of WifiPointsTimePlace.
+	 * @param destinationPath - the path for the updated file.
+	 *
+	 * The function replace all the locations of the source file with the location that listOfLocatins holds and create new file in a "destinationPath"
+	 *
+	 */
+	public static void changeLocationOfFile(List<WIFIWeight> listOfLocatins,List<WifiPointsTimePlace> allLinesOfSourceFile,String destinationPath) {
+
+		List<WifiPointsTimePlace> updatedListOfAllLines = new ArrayList<>();
+
+		for (int i = 0; i < allLinesOfSourceFile.size(); i++)
+		{
+			WifiPointsTimePlace oldPoint = allLinesOfSourceFile.get(i);//Old line
+
+			WIFIWeight location = listOfLocatins.get(i);//New location
+
+			WifiPointsTimePlace newLine = new WifiPointsTimePlace(oldPoint.getFirstSeen(),oldPoint.getDevice(),location.getWIFI_Lat()+"",location.getWIFI_Lon()+"",location.getWIFI_Alt()+"",oldPoint.getWifiPointsAsIs());
+			updatedListOfAllLines.add(newLine);//Add to list the new (updated) line
+		}
+
+		OutputCSVWriter.ExportToCSV(updatedListOfAllLines,destinationPath,null);
+	}
+
+	/**
+	 * The function gets a list of objects and path of file. The function creates a new file, that contains all of the objects in the list, at the address it received.
+	 * @param fileAfterSortintAndMerging - List of the the objects. The objects can only be WifiPointsTimePlace or WIFIWeight.
+	 * @param outputPath - the path of the new CSV file
+	 * @param <T> - WifiPointsTimePlace or WIFIWeight.
+	 */
 	public static<T extends Object> void ExportToCSV(List<T> fileAfterSortintAndMerging, String outputPath, Predicate<WifiPointsTimePlace> predicate) {
 
 		//Deletes file if it exists
@@ -74,33 +116,47 @@ public class OutputCSVWriter {
 		fileToDelete.delete();
 
 		FileWriter fileWriter = null;
-
 		CSVPrinter csvFilePrinter = null;
 
 		//Create the CSVFormat object with "\n" as a record delimiter
 		CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(NEW_LINE_SEPARATOR);
 
 		try {
-
 			//initialize FileWriter object
 			fileWriter = new FileWriter(outputPath);
 
-			//initialize CSVPrinter object 
+			//initialize CSVPrinter object
 			csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
 
 			//Create CSV file header
 			csvFilePrinter.printRecord(FILE_HEADER);
 
+			//If has filter, this list hold the lines that pass the filter
+			List<T> NewFileList = new ArrayList<>();
+
 			for (T line : fileAfterSortintAndMerging) {
 				if (line instanceof WifiPointsTimePlace) {
 					if (predicate==null)
 						csvFilePrinter.printRecord(((WifiPointsTimePlace)line).getWifiPoints());
-					else if(predicate.test((WifiPointsTimePlace)line)==true)
-						csvFilePrinter.printRecord(((WifiPointsTimePlace)line).getWifiPoints());
+					else
+					{
+						if(predicate.test((WifiPointsTimePlace)line)==true) {
+							csvFilePrinter.printRecord(((WifiPointsTimePlace) line).getWifiPoints());
+							NewFileList.add(line);
+						}
+					}
 				}else if(line instanceof WIFIWeight){
 					csvFilePrinter.printRecord(((WIFIWeight)line).propertiesOfWifiWeight());
 				}
 			}
+
+			if(predicate != null) {
+				//Update the fileAfterSortintAndMerging list that contains only lines that passes the filter.
+				fileAfterSortintAndMerging.clear();
+				for(int i = 0; i < NewFileList.size(); i++)
+					fileAfterSortintAndMerging.add(NewFileList.get(i));
+			}
+
 			System.out.println("CSV file was created successfully !!!");
 
 		} catch (Exception e) {
@@ -118,6 +174,9 @@ public class OutputCSVWriter {
 		}
 	}
 
+	/**
+	 * @return the hash table of the MACs.
+	 */
 	public HashRouters<String, WIFISample> getAllRoutersOfTheFiles() {
 		return allRoutersOfTheFiles;
 	}
