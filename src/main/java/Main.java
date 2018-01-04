@@ -194,9 +194,82 @@ public class Main{
                     +usersHashRouters.get(name).getCountOfRouters();
         });
 
+
         get("/saveFilter", (req, res) ->{
             System.out.println("starting saved filter");
-            return SaveFilter.saveFilter(req, res);
+//            return SaveFilter.saveFilter(req, res);
+            try (PrintStream out = new PrintStream(new FileOutputStream("UserFiles/savedFilter.txt"))) {
+                out.print(req.cookie("user")+",");
+                if (req.cookie("input1").matches(("[&]+"))){
+                    out.print(req.cookie("input1").replace("&","")+",");
+                }else{
+                    out.print(req.cookie("input1") + ",");
+                }
+                if (req.cookie("input2").matches(("[&]+"))){
+                    out.print(req.cookie("input2").replace("&","")+",");
+                }else{
+                    out.print(req.cookie("input2") + ",");
+                }
+                out.print(req.cookie("filter1")+",");
+                out.print(req.cookie("filter2")+",");
+                out.print(req.cookie("negate1")+",");
+                out.print(req.cookie("negate2")+",");
+                out.print(req.cookie("Logic"));
+            }
+
+            System.out.println("finished saved filter");
+            //======================return filter saved============================
+            String diplayLogic = req.cookie("Logic");
+            String displayInput2="";
+            String displayInput1 ="";
+            displayInput1 += req.cookie("negate1").contains("true") ? '!' : "";
+            if (req.cookie("filter1").contains("Device")) {
+                displayInput1 += '(' + "Device="+req.cookie("input1") + ')';
+            }else if (req.cookie("filter1").contains("Location")) {
+                String inputs[] = req.cookie("input1").split("&");
+                displayInput1+= "( ("+inputs[0] + "<=Lat<="+inputs[1] +") & ("+inputs[2] +"<=Lon<="+inputs[3] +") )";
+            }else if (req.cookie("filter1").contains("Time")) {
+                String inputs[] = req.cookie("input1").split("&");
+                displayInput1+= "( ("+inputs[0] +" <=Time<=   "+inputs[0] +") )";
+            }
+            if (req.cookie("Logic").contains("Choose")) {
+                diplayLogic = "";
+            }else{
+                displayInput2 += req.cookie("negate2").contains("true") ? '!' : "";
+                if (req.cookie("filter2").contains("Device")) {
+                    displayInput2 += '(' + "Device="+req.cookie("input2") + ')';
+                }else if (req.cookie("filter2").contains("Location")) {
+                    String inputs[] = req.cookie("input2").split("&");
+                    displayInput2+= "( ("+inputs[0] + "<=Lat<="+inputs[1] +") & ("+inputs[2] +"<=Lon<="+inputs[3] +") )";
+                }else if (req.cookie("filter1").contains("Time")) {
+                    String inputs[] = req.cookie("input2").split("&");
+                    displayInput2+= "( ("+inputs[0] +" <=Time<=   "+inputs[0] +") )";
+                }
+            }
+            //======================
+            String returnString = "saved filter "+displayInput1+ diplayLogic + displayInput2+" in server";
+            return returnString;
+        });
+        get("/restoreFilter", (req, res) ->{
+            System.out.println("starting saved filter");
+            Predicate finalPredicate = WebsiteFilter.filterFromSavedFile("UserFiles/savedFilter.txt");
+
+            //System.out.println("predicate "+finalPredicate.test(usersProcessedFile.get(req.cookie("user")).get(1)) );
+            new File("UserFiles/filteredOutput/"+req.cookie("user")).mkdir();
+            String name = req.cookie("user");
+            HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csvWithPredicate(usersProcessedFile.get(name)
+                    ,"UserFiles/filteredOutput/"+name,finalPredicate);
+
+            usersHashRouters.put(name,currnetHashRouter);
+            System.out.println("finished restoring filter");
+            System.out.println(usersProcessedFile.get(name).size()+","
+                    +usersHashRouters.get(name).getCountOfRouters());
+            String userName = req.cookie("user");
+            String returnStr = "true,"+userName+","+usersProcessedFile.get(userName).size()+","+usersHashRouters.get(userName).getCountOfRouters();
+            return returnStr;
+//            return "true,"+userName+","+usersProcessedFile.get(userName).size()+","+usersHashRouters.get(userName).getCountOfRouters();
+
+
         });
 
         get("/clearData", (req, res) ->{

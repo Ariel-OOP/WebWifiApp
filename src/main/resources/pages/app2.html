@@ -214,7 +214,7 @@
 
                 <hr>
                 <div class="btn-group">
-                    <button type="button" id="btnAddFilter" class="btn btn-primary">+</button>
+                    <button type="button" id="btnAddFilter" class="btn btn-primary">Restore Saved Filter</button>
                     <button type="button" id="btnFilterSumbit" class="btn btn-primary">Filter</button>
                     <button type="button" id="btnSaveFilter" class="btn btn-primary">Save Filter</button>
                     <button type="button" id="btnClearFilter" class="btn btn-primary">Clear Filter</button>
@@ -813,6 +813,27 @@
             $("div#inputLocationeDiv").hide();
             $("div#inputDeviceDiv").hide();
             $("select#FilterByLogic").hide();
+            $.ajax(
+                {
+                    "url": encodeURI("/restoreFilter")
+                }
+            ).then(
+                function(output) {
+                    var n = output.includes("true");
+                    var userNameOutput = output.split(",");
+                    $('div#filePopup').show();
+                    if(n==true){
+                        $("h4#filePopupMsg").html("saved "+ userNameOutput[1]);
+                        $("h3#NumberOfLines").html(""+ userNameOutput[2]);
+                        console.log("NumberOfLines:"+userNameOutput[2]);
+                        $("h3#NumberOfMACS").html(""+ userNameOutput[3]);
+                        console.log("NumberOfMACS:"+userNameOutput[3]);
+
+                    }
+                    else
+                        $("h4#filePopupMsg").html("Can't save no files, try loading some files dimwit.")
+                }
+            );
         });
         <!-- Submit Filter -->
         $("#btnFilterSumbit").click(function(){
@@ -965,6 +986,7 @@
                 }
             ).then(
                 function(output) {
+                    alert(output);
                 }
             );
         });
