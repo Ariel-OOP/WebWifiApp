@@ -21,6 +21,12 @@ public class TimePredicate implements Predicate<WifiPointsTimePlace> {
         timeToStr= timeToStr.replace("T"," ");
 
         try {
+            //If doesn't have a second then the default is :00
+            if(timeFromStr.split(":").length == 2)
+                timeFromStr += ":00";
+            //If doesn't have a second then the default is :00
+            if(timeToStr.split(":").length == 2)
+                timeToStr += ":00";
 
             Date timeFrom = formatter.parse(timeFromStr);
             Date timeTo = formatter.parse(timeToStr);
@@ -48,6 +54,7 @@ public class TimePredicate implements Predicate<WifiPointsTimePlace> {
 //        System.out.println("test date to "+timeTo);
 //        System.out.println("check date");
 //        System.out.println(lineDate.after(this.timeFrom) && lineDate.before(this.timeTo));
-        return lineDate.after(this.timeFrom) && lineDate.before(this.timeTo);
+        return (lineDate.after(this.timeFrom) && lineDate.before(this.timeTo)) ||
+                lineDate.equals(this.timeFrom) || lineDate.equals(this.timeTo);
     }
 }
