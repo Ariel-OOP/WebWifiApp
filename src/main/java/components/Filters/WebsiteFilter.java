@@ -4,6 +4,9 @@ import components.Attributes.WifiPointsTimePlace;
 import spark.Request;
 import spark.Response;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.function.Predicate;
 
 public class WebsiteFilter {
@@ -55,6 +58,76 @@ public class WebsiteFilter {
                 predicate2 = predicate2.negate();
 
             String logicSymbol = req.cookie("Logic");
+            if (logicSymbol.equals("And")){
+                finalPredicate = predicate1.and(predicate2);
+            }else if (logicSymbol.equals("Or")){
+                finalPredicate = predicate1.or(predicate2);
+            }
+        }
+        if (predicate2==null)
+            finalPredicate = predicate1;
+
+        return finalPredicate;
+    }
+    public static Predicate filterFromSavedFile(String file){
+        String content="";
+        try {
+            content = new String(Files.readAllBytes(Paths.get(file)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (content.equals(""))
+            return null;
+
+        String filterString[] = content.split(",");
+        String user = filterString[0] ;
+        String input1 = filterString[1] ;
+        String input2 = filterString[2] ;
+        String filter1 = filterString[3] ;
+        String filter2 = filterString[4] ;
+        String negate1 = filterString[5] ;
+        String negate2 = filterString[6] ;
+        String Logic = filterString[7] ;
+
+        String[] inputsFilter1 = input1.split("&");
+        Predicate<WifiPointsTimePlace> predicate1 = null; //mean time
+        Predicate<WifiPointsTimePlace> predicate2 = null; //mean time
+        Predicate<WifiPointsTimePlace> finalPredicate = null; //mean time
+
+        switch (filter1){
+            case "Location":
+                predicate1 = new PlacePredicate(Double.parseDouble(inputsFilter1[0]),Double.parseDouble(inputsFilter1[1]),
+                        Double.parseDouble(inputsFilter1[2]),Double.parseDouble(inputsFilter1[3]) );
+                break;
+            case "Device":
+                predicate1 = new DevicePredicate(inputsFilter1[0]);
+                break;
+            case "Time":
+                predicate1 = new TimePredicate(inputsFilter1[0],inputsFilter1[1]);
+                break;
+        }
+        if (negate1.equals("true"))
+            predicate1 = predicate1.negate();
+        // if there is logic
+        if (Logic.equals("And") ||Logic.equals("Or")) {
+            String[] inputsFilter2 = input2.split("&");
+
+            switch (filter2) {
+                case "Location":
+                    predicate2 = new PlacePredicate(Double.parseDouble(inputsFilter2[0]), Double.parseDouble(inputsFilter2[1]),
+                            Double.parseDouble(inputsFilter2[2]), Double.parseDouble(inputsFilter2[3]));
+                    break;
+                case "Device":
+                    predicate2 = new DevicePredicate(inputsFilter2[0]);
+                    break;
+                case "Time":
+                    predicate2 = new TimePredicate(inputsFilter2[0], inputsFilter2[1]);
+                    break;
+            }
+            if (negate2.equals("true"))
+                predicate2 = predicate2.negate();
+
+            String logicSymbol = Logic;
             if (logicSymbol.equals("And")){
                 finalPredicate = predicate1.and(predicate2);
             }else if (logicSymbol.equals("Or")){
