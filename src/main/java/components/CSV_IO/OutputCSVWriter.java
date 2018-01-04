@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.function.Predicate;
 
 /**
-		* @author Moshe
-		*/
+* @author Moshe
+*/
 
 public class OutputCSVWriter {
 
@@ -116,14 +116,12 @@ public class OutputCSVWriter {
 		fileToDelete.delete();
 
 		FileWriter fileWriter = null;
-
 		CSVPrinter csvFilePrinter = null;
 
 		//Create the CSVFormat object with "\n" as a record delimiter
 		CSVFormat csvFileFormat = CSVFormat.DEFAULT.withRecordSeparator(NEW_LINE_SEPARATOR);
 
 		try {
-
 			//initialize FileWriter object
 			fileWriter = new FileWriter(outputPath);
 
@@ -133,16 +131,32 @@ public class OutputCSVWriter {
 			//Create CSV file header
 			csvFilePrinter.printRecord(FILE_HEADER);
 
+			//If has filter, this list hold the lines that pass the filter
+			List<T> NewFileList = new ArrayList<>();
+
 			for (T line : fileAfterSortintAndMerging) {
 				if (line instanceof WifiPointsTimePlace) {
 					if (predicate==null)
 						csvFilePrinter.printRecord(((WifiPointsTimePlace)line).getWifiPoints());
-					else if(predicate.test((WifiPointsTimePlace)line)==true)
-						csvFilePrinter.printRecord(((WifiPointsTimePlace)line).getWifiPoints());
+					else
+					{
+						if(predicate.test((WifiPointsTimePlace)line)==true) {
+							csvFilePrinter.printRecord(((WifiPointsTimePlace) line).getWifiPoints());
+							NewFileList.add(line);
+						}
+					}
 				}else if(line instanceof WIFIWeight){
 					csvFilePrinter.printRecord(((WIFIWeight)line).propertiesOfWifiWeight());
 				}
 			}
+
+			if(predicate != null) {
+				//Update the fileAfterSortintAndMerging list that contains only lines that passes the filter.
+				fileAfterSortintAndMerging.clear();
+				for(int i = 0; i < NewFileList.size(); i++)
+					fileAfterSortintAndMerging.add(NewFileList.get(i));
+			}
+
 			System.out.println("CSV file was created successfully !!!");
 
 		} catch (Exception e) {
@@ -160,7 +174,6 @@ public class OutputCSVWriter {
 		}
 	}
 
-
 	/**
 	 * @return the hash table of the MACs.
 	 */
@@ -168,4 +181,3 @@ public class OutputCSVWriter {
 		return allRoutersOfTheFiles;
 	}
 }
-

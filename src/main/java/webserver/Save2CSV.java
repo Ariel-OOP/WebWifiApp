@@ -3,6 +3,7 @@ package webserver;
 import components.Attributes.HashRouters;
 import components.Attributes.WIFISample;
 import components.Attributes.WifiPointsTimePlace;
+import components.CSV_IO.CoboCSVReader;
 import components.CSV_IO.OutputCSVWriter;
 
 import java.io.File;
@@ -61,47 +62,28 @@ public class Save2CSV{
 
     }
 
-    public static HashRouters<String,WIFISample> save2csvWithPredicate(String uploadPath, String outputPath, Predicate predicate){
+    public static HashRouters<String,WIFISample> save2csvWithPredicate(List<WifiPointsTimePlace> processedFile, String outputPath, Predicate predicate){
         System.out.println("==================saving to csv=============");
         System.out.println("============================================");
 
         File selectedFolder=null;
         File selectedFile = null;
         List<File> selectedFiles=new ArrayList<>();
-        List<WifiPointsTimePlace> processedFile=new ArrayList<>();
-        HashRouters<String,WIFISample> routersOfAllFiles;
 
-        if(selectedFiles==null && selectedFolder==null){
-            //TODO
+        HashRouters<String,WIFISample> routersOfAllFiles = new HashRouters<>();
+
+
+        OutputCSVWriter.ExportToCSV(processedFile,outputPath+"/OutputCSV.csv",predicate);
+
+        try {
+            //To update the hashRouters, the program calls the file that create after the filter (in adjacent line) and update the hashRouters with correct information.
+            CoboCSVReader.readCsvFile(outputPath+"/OutputCSV.csv",routersOfAllFiles);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        File dir = new File(uploadPath);
-        for (File file : dir.listFiles()) {
-            //Incorrect file type-reject
-            if (!(file.getName().toLowerCase().endsWith(".csv"))) {
-                System.out.println(file.getName() + " is an incorrect file type in the folder");
-                System.out.println("the file was not added to the csv file error 404");
-                continue;
-            }else{ //add absolute path
-                selectedFiles.add(file.getAbsoluteFile());
-            }
-        }
-        for(File file : selectedFiles){
-            System.out.println(file.getAbsolutePath());
-        }
-
-
-        OutputCSVWriter outputCSVWriter = new OutputCSVWriter(selectedFiles);
-
-        processedFile =  outputCSVWriter.sortAndMergeFiles();
-
-        outputCSVWriter.ExportToCSV(processedFile,outputPath+"/OutputCSV.csv",predicate);
-
-        routersOfAllFiles = outputCSVWriter.getAllRoutersOfTheFiles();
 
         csvToHtml( processedFile,outputPath+"/OutputCSV.txt");
         return routersOfAllFiles;
-
     }
 
     public static void csvToHtml(List<WifiPointsTimePlace> processedFile,String outputPath){
@@ -115,7 +97,6 @@ public class Save2CSV{
                 "\t\t\t\t\t\t</tr>\n" +
                 "\t\t\t\t\t</thead>\n" +
                 "\t\t\t\t\t<tbody>";
-
 
         int countLines=0;
         for (WifiPointsTimePlace wifiPointsTimePlace : processedFile){
@@ -140,7 +121,5 @@ public class Save2CSV{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
-
 }

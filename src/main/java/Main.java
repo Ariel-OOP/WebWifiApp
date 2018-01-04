@@ -180,13 +180,14 @@ public class Main{
 
         get("/filter", (req, res) ->{
             Predicate finalPredicate = WebsiteFilter.filter(req,res);
-            System.out.println("predicate "+finalPredicate.test(usersProcessedFile.get(req.cookie("user")).get(1)) );
-            new File("UserFiles/filteredOutput/"+req.cookie("user")).mkdir();
+            String name = req.cookie("user");
 
-            HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csvWithPredicate("UserFiles/upload/"+req.cookie("user")
-                    ,"UserFiles/filteredOutput/"+req.cookie("user"),finalPredicate);
+            System.out.println("predicate "+finalPredicate.test(usersProcessedFile.get(name).get(1)) );
+            new File("UserFiles/filteredOutput/"+name).mkdir();
 
-            usersHashRouters.put(req.cookie("user"),currnetHashRouter);
+            HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csvWithPredicate(usersProcessedFile.get(name)
+                    ,"UserFiles/filteredOutput/"+name,finalPredicate);
+
             return "filtered";
         });
 
@@ -307,61 +308,12 @@ public class Main{
                 //==========================================added 12-31-17 - end
                 System.out.println("processed file size:"+ usersProcessedFile.get(userName).size());
                 System.out.println("hash routers file size:"+ usersHashRouters.get(userName).getCountOfRouters());
-
-//                 processedFile = usersProcessedFile.get(userName);
-
-//                OutputCSVWriter.ExportToCSV(usersProcessedFile.get(userName),"UserFiles/output/"+userName+"/testOutputCSV.csv",null);
-//
-//
-//                return "true,"+userName+","+usersProcessedFile.get(userName).size()+","
-//                        +usersHashRouters.get(userName).getCountOfRouters();
-//                return "true,nis";
              }
 
              OutputCSVWriter.ExportToCSV(usersProcessedFile.get(userName),"UserFiles/output/"+userName+"/OutputCSV.csv",null);
 
              return "true,"+userName+","+usersProcessedFile.get(userName).size()+","
                     +usersHashRouters.get(userName).getCountOfRouters();
-//             else if (comboFiles.list().length>0){
-//                 System.out.println("saving to csv output");
-//                 usersHashRouters.get(req.cookie("user")).mergeToHash(Save2CSV.save2csv("UserFiles/upload/"+req.cookie("user"),"UserFiles/output/"+req.cookie("user")));
-//                 //HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csv("UserFiles/upload/"+req.cookie("user"),"UserFiles/output/"+req.cookie("user"));
-//                 usersHashRouters.put(req.cookie("user"),usersHashRouters.get(req.cookie("user")));
-////                hashRouters = Save2CSV.save2csv("upload/"+req.cookie("user"),"output/"+req.cookie("user"));
-//
-//                 //==========================================added 12-31-17
-//                 List<File> selectedFiles= new ArrayList<>();
-//                 for(File file2 : comboFiles.listFiles()){
-//                     selectedFiles.add(file2);
-//                 }
-//
-////                 OutputCSVWriter outputCSVWriter = new OutputCSVWriter(selectedFiles);
-//                 for (File comboSingleFile : comboFiles.listFiles()){
-//                     processedFile.addAll(CoboCSVReader.readCsvFile(comboSingleFile.getPath(),usersHashRouters.get(req.cookie("user"))));
-//
-//                 }
-//
-//
-////                 processedFile.addAll(outputCSVWriter.sortAndMergeFiles());
-//                 usersProcessedFile.put(req.cookie("user"),processedFile);
-//                 System.out.println(req.cookie("user"));
-//
-//                 //==========================================added 12-31-17 - end
-//                 System.out.println("processed file size:"+ usersProcessedFile.get(req.cookie("user")).size());
-//                 System.out.println("hash routers file size:"+ usersHashRouters.get(req.cookie("user")).getCountOfRouters());
-//                 return "true,"+req.cookie("user")+","+usersProcessedFile.get(req.cookie("user")).size()+","
-//                         +usersHashRouters.get(req.cookie("user")).getCountOfRouters();
-////                return "true,nis";
-//
-//             }
-//             else{
-//                System.out.println("cannot save to output csv");
-//                System.out.println("Directory is empty!");
-//                return "false,"+req.cookie("user");
-//                }
-//
-////            hashRouters = Save2CSV.save2csv();
-
         });
 
         get("/submitAlgo1", (req, res) ->{
@@ -521,9 +473,6 @@ public class Main{
             res.redirect("app2.html");
                     return "hello user" +userName;
         });
-
-
-
 
         post("/sendFiles", (Request req, Response res) -> {
             //make sub folder for user
