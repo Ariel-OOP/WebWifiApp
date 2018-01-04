@@ -281,6 +281,7 @@
             Cookies.set('filter2', '' , { expires: 600 });
             Cookies.set('logic', '-' , { expires: 600 });
         }
+
         var diplayLogic = Cookies.get('Logic')
         var displayInput2='';
         var displayInput1 ='';
@@ -289,9 +290,11 @@
             displayInput1 += '(' + 'Device='+Cookies.get('input1') + ')';
         }else if ($("#FilterBySelection :selected").text().includes('Location')){
             displayInput1+= '( ('+$("#inputStartLat").val() + '<=Lat<='+$("#inputEndLat").val()+") & ("+ $("#inputStartLon").val()+"<=Lon<="+ $("#inputEndLon").val()+') )';
+
         }else if ($("#FilterBySelection :selected").text().includes('Time')){
             displayInput1+= '( ('+$("#start").val()+"  "+$("#startTime").val() +" <=Time<= "+ $("#end").val()+"  "+$("#endTime").val()+') )';
         }
+
         if (Cookies.get('Logic').includes('Choose Logic')) {
             diplayLogic = '';
         }else{
@@ -300,6 +303,7 @@
                 displayInput2 += '(' + 'Device='+Cookies.get('input2') + ')';
             }else if ($("#FilterBySelection2 :selected").text().includes('Location')){
                 displayInput2+= '( ('+$("#inputStartLat2").val() + '<=Lat<='+$("#inputEndLat2").val()+") & ("+ $("#inputStartLon2").val()+"<=Lon<="+ $("#inputEndLon2").val()+') )';
+
             }else if ($("#FilterBySelection2 :selected").text().includes('Time')){
                 displayInput2+= '( ('+$("#start2").val()+"  "+$("#startTime2").val() +" <=Time<= "+ $("#end2").val()+"  "+$("#endTime2").val()+') )';
             }
@@ -471,6 +475,7 @@
             }
         }
     });
+
     <!-- Clear Filter-->
     $("button#btnClearFilter").click(() => {
         alert("will clear filter");
@@ -485,13 +490,16 @@
             $('div#filePopup').show();
             if(n==true){
                 $("h4#filePopupMsg").html("saved "+ userNameOutput[1]);
+
                 $("h3#NumberOfLines").html(""+ userNameOutput[2]);
                 console.log("NumberOfLines:"+userNameOutput[2]);
                 $("h3#NumberOfMACS").html(""+ userNameOutput[3]);
                 console.log("NumberOfMACS:"+userNameOutput[3]);
+
             }
             else
                 $("h4#filePopupMsg").html("Can't save no files, try loading some files dimwit.")
+
         }
     );
     return false
