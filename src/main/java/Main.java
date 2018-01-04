@@ -188,7 +188,10 @@ public class Main{
             HashRouters<String,WIFISample> currnetHashRouter= Save2CSV.save2csvWithPredicate(usersProcessedFile.get(name)
                     ,"UserFiles/filteredOutput/"+name,finalPredicate);
 
-            return "filtered";
+            usersHashRouters.put(name,currnetHashRouter);
+
+            return "true,"+name+","+usersProcessedFile.get(name).size()+","
+                    +usersHashRouters.get(name).getCountOfRouters();
         });
 
         get("/saveFilter", (req, res) ->{
