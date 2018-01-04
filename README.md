@@ -9,7 +9,7 @@ login into username auto for automatic updating feature.
 
 # Instructions:
 
-1- Double click on App.bat to launch or go to https://www.wigle-wifi-app.herokuapp.com/   to play around
+1- Double click on App.bat to launch or go to https://wigle-wifi-app.herokuapp.com/  to play around
 2- Use the name auto to receive updates to files automatically
 
 # Almost done explainig,
