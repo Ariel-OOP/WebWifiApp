@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="288.0" y="1627.0">components.Algorithms.WeightedArithmeticMean</node>
+    <node x="1558.0833333333335" y="0.0">components.Attributes.WIFIWeight</node>
+    <node x="1609.1666666666665" y="1052.0">components.Attributes.WifiPointsTimePlace</node>
+    <node x="2924.4900162594604" y="1627.0">components.Filters.DevicePredicate</node>
+    <node x="2617.1229790785337" y="1814.0">components.Filters.WebsiteFilter</node>
+    <node x="634.0" y="1638.0">components.CSV_IO.CoboCSVReader</node>
+    <node x="1761.4900162594604" y="647.0">components.Algorithms.Algorithm2</node>
+    <node x="1234.5" y="110.0">components.Filters.DateParser</node>
+    <node x="0.0" y="1627.0">components.Filters.Filter</node>
+    <node x="1227.7328369161696" y="1792.0">components.CSV_IO.OutputCSVWriter</node>
+    <node x="1399.3333333333335" y="1616.0">components.CSV_IO.WigleFileReader</node>
+    <node x="973.3824498546718" y="1162.0">components.Attributes.HashRouters</node>
+    <node x="22.0" y="1825.0">components.CSV_IO.KmlExporter</node>
+    <node x="2995.9900162594604" y="647.0">components.CSV_IO.CSVReader</node>
+    <node x="2377.4900162594604" y="1638.0">components.Filters.TimePredicate</node>
+    <node x="2651.4900162594604" y="1638.0">components.Filters.PlacePredicate</node>
+    <node x="833.8152867708415" y="2050.0">Main</node>
+    <node x="1247.5" y="416.0">components.Attributes.WIFISample</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="components.Filters.WebsiteFilter" target="components.Attributes.WifiPointsTimePlace">
+      <point x="-32.875" y="-37.0" />
+      <point x="2715.7479790785337" y="1762.0" />
+      <point x="2640.9900162594604" y="1762.0" />
+      <point x="2640.9900162594604" y="1576.0" />
+      <point x="1862.0128205128203" y="1576.0" />
+      <point x="79.84615384615381" y="202.0" />
+    </edge>
+    <edge source="components.Attributes.WifiPointsTimePlace" target="components.Attributes.WIFIWeight">
+      <point x="28.833333333333258" y="-202.0" />
+      <point x="1811.0" y="1022.0" />
+      <point x="1750.9900162594604" y="1022.0" />
+      <point x="1750.9900162594604" y="386.0" />
+      <point x="1694.0833333333335" y="386.0" />
+      <point x="0.0" y="158.0" />
+    </edge>
+    <edge source="Main" target="components.Attributes.HashRouters">
+      <point x="59.18181818181802" y="-180.0" />
+      <point x="1078.9971049526594" y="1960.0" />
+      <point x="1181.5" y="1960.0" />
+      <point x="1181.5" y="1536.0" />
+      <point x="1145.882449854672" y="1536.0" />
+      <point x="0.0" y="92.0" />
+    </edge>
+    <edge source="components.CSV_IO.WigleFileReader" target="components.Attributes.HashRouters">
+      <point x="-154.66666666666652" y="-48.0" />
+      <point x="1418.666666666667" y="1496.0" />
+      <point x="1252.036296008518" y="1496.0" />
+      <point x="106.15384615384619" y="92.0" />
+    </edge>
+    <edge source="components.Filters.WebsiteFilter" target="components.Filters.DevicePredicate">
+      <point x="98.625" y="-37.0" />
+      <point x="2847.2479790785337" y="1772.0" />
+      <point x="3050.9900162594604" y="1772.0" />
+      <point x="0.0" y="37.0" />
+    </edge>
+    <edge source="components.CSV_IO.CSVReader" target="components.Attributes.WIFIWeight">
+      <point x="-107.0" y="-37.0" />
+      <point x="3102.9900162594604" y="346.0" />
+      <point x="1792.992424242424" y="346.0" />
+      <point x="98.90909090909076" y="158.0" />
+    </edge>
+    <edge source="components.Filters.WebsiteFilter" target="components.Filters.PlacePredicate">
+      <point x="32.875" y="-37.0" />
+      <point x="2781.4979790785337" y="1772.0" />
+      <point x="2777.9900162594604" y="1772.0" />
+      <point x="0.0" y="26.0" />
+    </edge>
+    <edge source="components.Attributes.WifiPointsTimePlace" target="components.Algorithms.Algorithm2">
+      <point x="86.5" y="-202.0" />
+      <point x="1868.6666666666665" y="1032.0" />
+      <point x="1858.8233495927936" y="1032.0" />
+      <point x="-194.66666666666663" y="37.0" />
+    </edge>
+    <edge source="components.CSV_IO.OutputCSVWriter" target="components.Attributes.WIFISample">
+      <point x="-25.09999999999991" y="-59.0" />
+      <point x="1453.6328369161697" y="1732.0" />
+      <point x="1388.8333333333335" y="1732.0" />
+      <point x="1388.8333333333335" y="1032.0" />
+      <point x="1382.5" y="1032.0" />
+      <point x="18.0" y="268.0" />
+    </edge>
+    <edge source="components.CSV_IO.CoboCSVReader" target="components.Attributes.WifiPointsTimePlace">
+      <point x="201.5999999999999" y="-26.0" />
+      <point x="1087.6" y="1586.0" />
+      <point x="1649.0897435897436" y="1586.0" />
+      <point x="-133.0769230769231" y="202.0" />
+    </edge>
+    <edge source="components.CSV_IO.KmlExporter" target="components.Filters.Filter">
+      <point x="0.0" y="-26.0" />
+      <point x="0.0" y="37.0" />
+    </edge>
+    <edge source="components.CSV_IO.CoboCSVReader" target="components.Attributes.HashRouters">
+      <point x="0.0" y="-26.0" />
+      <point x="886.0" y="1566.0" />
+      <point x="1039.7286037008257" y="1566.0" />
+      <point x="-106.15384615384619" y="92.0" />
+    </edge>
+    <edge source="components.Filters.PlacePredicate" target="components.Attributes.WifiPointsTimePlace">
+      <point x="0.0" y="-26.0" />
+      <point x="2777.9900162594604" y="1566.0" />
+      <point x="1888.628205128205" y="1566.0" />
+      <point x="106.46153846153857" y="202.0" />
+    </edge>
+    <edge source="Main" target="components.CSV_IO.OutputCSVWriter">
+      <point x="93.0" y="-180.0" />
+      <point x="1112.8152867708413" y="1980.0" />
+      <point x="1604.2328369161696" y="1980.0" />
+      <point x="125.5" y="59.0" />
+    </edge>
+    <edge source="Main" target="components.Filters.Filter">
+      <point x="-126.81818181818198" y="-180.0" />
+      <point x="892.9971049526595" y="2000.0" />
+      <point x="250.0" y="2000.0" />
+      <point x="250.0" y="1772.0" />
+      <point x="213.33333333333348" y="1772.0" />
+      <point x="85.33333333333348" y="37.0" />
+    </edge>
+    <edge source="Main" target="components.Algorithms.Algorithm2">
+      <point x="160.6363636363635" y="-180.0" />
+      <point x="1180.4516504072049" y="2020.0" />
+      <point x="3198.9900162594604" y="2020.0" />
+      <point x="3198.9900162594604" y="1032.0" />
+      <point x="2248.156682926127" y="1032.0" />
+      <point x="194.66666666666674" y="37.0" />
+    </edge>
+    <edge source="Main" target="components.Algorithms.WeightedArithmeticMean">
+      <point x="-59.181818181818244" y="-180.0" />
+      <point x="960.6334685890232" y="1960.0" />
+      <point x="453.06528677084145" y="1960.0" />
+      <point x="453.06528677084145" y="1772.0" />
+      <point x="523.5" y="1772.0" />
+      <point x="78.5" y="37.0" />
+    </edge>
+    <edge source="components.Filters.DevicePredicate" target="components.Attributes.WifiPointsTimePlace">
+      <point x="0.0" y="-37.0" />
+      <point x="3050.9900162594604" y="1556.0" />
+      <point x="1915.2435897435898" y="1556.0" />
+      <point x="133.0769230769231" y="202.0" />
+    </edge>
+    <edge source="Main" target="components.CSV_IO.CoboCSVReader">
+      <point x="-8.454545454545496" y="-180.0" />
+      <point x="1011.360741316296" y="1930.0" />
+      <point x="886.0" y="1930.0" />
+      <point x="0.0" y="26.0" />
+    </edge>
+    <edge source="Main" target="components.Filters.WebsiteFilter">
+      <point x="126.81818181818198" y="-180.0" />
+      <point x="1146.6334685890233" y="2000.0" />
+      <point x="2748.6229790785337" y="2000.0" />
+      <point x="0.0" y="37.0" />
+    </edge>
+    <edge source="components.Algorithms.WeightedArithmeticMean" target="components.Attributes.WIFISample">
+      <point x="-26.166666666666515" y="-37.0" />
+      <point x="418.8333333333335" y="1596.0" />
+      <point x="426.99911652133835" y="1596.0" />
+      <point x="426.99911652133835" y="972.0" />
+      <point x="1256.5" y="972.0" />
+      <point x="-108.0" y="268.0" />
+    </edge>
+    <edge source="Main" target="components.Attributes.WIFIWeight">
+      <point x="-109.90909090909099" y="-180.0" />
+      <point x="909.9061958617505" y="1990.0" />
+      <point x="266.5" y="1990.0" />
+      <point x="266.5" y="366.0" />
+      <point x="1570.4469696969695" y="366.0" />
+      <point x="-123.63636363636374" y="158.0" />
+    </edge>
+    <edge source="components.Algorithms.Algorithm2" target="components.Attributes.WifiPointsTimePlace">
+      <point x="0.0" y="37.0" />
+      <point x="2053.4900162594604" y="1032.0" />
+      <point x="1926.3333333333335" y="1032.0" />
+      <point x="144.16666666666674" y="-202.0" />
+    </edge>
+    <edge source="Main" target="components.Attributes.WIFISample">
+      <point x="-25.363636363636488" y="-180.0" />
+      <point x="994.451650407205" y="1940.0" />
+      <point x="623.5" y="1940.0" />
+      <point x="623.5" y="1002.0" />
+      <point x="1310.5" y="1002.0" />
+      <point x="-54.0" y="268.0" />
+    </edge>
+    <edge source="components.Filters.TimePredicate" target="components.Attributes.WifiPointsTimePlace">
+      <point x="0.0" y="-26.0" />
+      <point x="2503.9900162594604" y="1586.0" />
+      <point x="1835.397435897436" y="1586.0" />
+      <point x="53.23076923076928" y="202.0" />
+    </edge>
+    <edge source="components.CSV_IO.WigleFileReader" target="components.Attributes.WifiPointsTimePlace">
+      <point x="116.0" y="-48.0" />
+      <point x="1689.3333333333335" y="1596.0" />
+      <point x="1702.3205128205127" y="1596.0" />
+      <point x="-79.84615384615381" y="202.0" />
+    </edge>
+    <edge source="Main" target="components.CSV_IO.CSVReader">
+      <point x="177.5454545454545" y="-180.0" />
+      <point x="1197.3607413162958" y="2030.0" />
+      <point x="3209.9900162594604" y="2030.0" />
+      <point x="0.0" y="37.0" />
+    </edge>
+    <edge source="components.CSV_IO.WigleFileReader" target="components.Attributes.WIFISample">
+      <point x="0.0" y="-48.0" />
+      <point x="1573.3333333333335" y="1022.0" />
+      <point x="1418.5" y="1022.0" />
+      <point x="54.0" y="268.0" />
+    </edge>
+    <edge source="Main" target="components.CSV_IO.KmlExporter">
+      <point x="-143.72727272727275" y="-180.0" />
+      <point x="876.0880140435687" y="2010.0" />
+      <point x="181.0" y="2010.0" />
+      <point x="53.0" y="26.0" />
+    </edge>
+    <edge source="components.CSV_IO.OutputCSVWriter" target="components.Attributes.HashRouters">
+      <point x="-225.89999999999986" y="-59.0" />
+      <point x="1252.8328369161698" y="1772.0" />
+      <point x="1240.5328369161698" y="1772.0" />
+      <point x="1240.5328369161698" y="1526.0" />
+      <point x="1172.4209113931333" y="1526.0" />
+      <point x="26.538461538461434" y="92.0" />
+    </edge>
+    <edge source="components.CSV_IO.OutputCSVWriter" target="components.CSV_IO.WigleFileReader">
+      <point x="25.09999999999991" y="-59.0" />
+      <point x="1503.8328369161695" y="1772.0" />
+      <point x="1486.3333333333335" y="1772.0" />
+      <point x="-87.0" y="48.0" />
+    </edge>
+    <edge source="components.CSV_IO.OutputCSVWriter" target="components.Attributes.WIFIWeight">
+      <point x="225.9000000000001" y="-59.0" />
+      <point x="1704.6328369161697" y="1772.0" />
+      <point x="2355.9900162594604" y="1772.0" />
+      <point x="2355.9900162594604" y="356.0" />
+      <point x="1768.2651515151515" y="356.0" />
+      <point x="74.18181818181824" y="158.0" />
+    </edge>
+    <edge source="components.Filters.WebsiteFilter" target="components.Filters.TimePredicate">
+      <point x="-98.625" y="-37.0" />
+      <point x="2649.9979790785337" y="1772.0" />
+      <point x="2503.9900162594604" y="1772.0" />
+      <point x="0.0" y="26.0" />
+    </edge>
+    <edge source="components.CSV_IO.OutputCSVWriter" target="components.Attributes.WifiPointsTimePlace">
+      <point x="125.5" y="-59.0" />
+      <point x="1604.2328369161696" y="1752.0" />
+      <point x="1771.1666666666665" y="1752.0" />
+      <point x="1771.1666666666665" y="1596.0" />
+      <point x="1755.5512820512822" y="1596.0" />
+      <point x="-26.615384615384528" y="202.0" />
+    </edge>
+    <edge source="components.CSV_IO.CoboCSVReader" target="components.Attributes.WIFISample">
+      <point x="-201.60000000000014" y="-26.0" />
+      <point x="684.3999999999999" y="1536.0" />
+      <point x="729.2999999999998" y="1536.0" />
+      <point x="729.2999999999998" y="1012.0" />
+      <point x="1328.5" y="1012.0" />
+      <point x="-36.0" y="268.0" />
+    </edge>
+    <edge source="Main" target="components.Attributes.WifiPointsTimePlace">
+      <point x="143.72727272727252" y="-180.0" />
+      <point x="1163.5425594981139" y="2010.0" />
+      <point x="3187.9900162594604" y="2010.0" />
+      <point x="3187.9900162594604" y="1546.0" />
+      <point x="1941.8589743589746" y="1546.0" />
+      <point x="159.69230769230785" y="202.0" />
+    </edge>
+    <edge source="components.Algorithms.WeightedArithmeticMean" target="components.Attributes.WIFIWeight">
+      <point x="-78.5" y="-37.0" />
+      <point x="366.5" y="1596.0" />
+      <point x="379.60668292612684" y="1596.0" />
+      <point x="379.60668292612684" y="396.0" />
+      <point x="1644.628787878788" y="396.0" />
+      <point x="-49.454545454545496" y="158.0" />
+    </edge>
+    <edge source="components.Algorithms.Algorithm2" target="components.Attributes.WIFIWeight">
+      <point x="146.0" y="-37.0" />
+      <point x="2199.4900162594604" y="366.0" />
+      <point x="1743.537878787879" y="366.0" />
+      <point x="49.454545454545496" y="158.0" />
+    </edge>
+    <edge source="components.Attributes.WIFISample" target="components.Filters.DateParser">
+      <point x="0.0" y="-268.0" />
+      <point x="0.0" y="48.0" />
+    </edge>
+    <edge source="components.Algorithms.WeightedArithmeticMean" target="components.Attributes.HashRouters">
+      <point x="78.5" y="-37.0" />
+      <point x="523.5" y="1546.0" />
+      <point x="986.6516806239025" y="1546.0" />
+      <point x="-159.23076923076928" y="92.0" />
+    </edge>
+    <edge source="components.Attributes.WifiPointsTimePlace" target="components.Attributes.WIFISample">
+      <point x="-86.5" y="-202.0" />
+      <point x="1695.6666666666665" y="992.0" />
+      <point x="1472.5" y="992.0" />
+      <point x="108.0" y="268.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.02880658436214" x="1465.524" y="221.216" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>packageLocal</VISIBILITY>
+</Diagram>
+
