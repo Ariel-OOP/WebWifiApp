@@ -20,4 +20,10 @@ In the UserFiles folder there are multiple folders.<br><br>
 	 1- upload - the upload folder contains what a folder that has been uploaded by the user.<br>
 	 2 - comboFolder - the upload folder contains what has been uploaded by the user.<br>
 	 3 - output - is the csv that is created without filters<br>
-	 4 - filteredOutput - is the csv that is filtered <br>
+	 4 - filteredOutput - is the csv that is filtered <br><br>
+This project currently uses <strong>Maven</strong> to download jars and to automatically deploy to a heroku server.
+<br>Also, the project heavily depends on the <strong>Spark framework</strong> for routing.
+
+# Other inclusions
+
+Uml diagrams in uml and jpeg formats.
