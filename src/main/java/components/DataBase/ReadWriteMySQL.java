@@ -9,6 +9,7 @@ package components.DataBase; /**
  * @see https://github.com/benmoshe/OOP_Exe/edit/master/src/db/MySQL_101.java
  */
 
+import components.Attributes.HashRouters;
 import components.Attributes.WIFISample;
 import components.Attributes.WifiPointsTimePlace;
 
@@ -20,66 +21,78 @@ import java.util.logging.Logger;
 
 public class ReadWriteMySQL {
 
-    private static String _ip = "5.29.193.52";
-    private static String _url = "jdbc:mysql://"+_ip+":3306/oop_course_ariel";
-    private static String _user = "oop1";
-    private static String _password = "Lambda1();";
-    private static Connection _con = null;
+    private String _tableName = "oop_course_ariel";
+    private String _ip = "5.29.193.52";
+    private String _port = "3306";
+    private String _url = "jdbc:mysql://"+_ip+":"+_port+"/" + _tableName;
+    private String _user = "oop1";
+    private String _DataBase = "";
+    private String _password = "Lambda1();";
+    private Connection _con = null;
 
-    public static void main(String[] args) {
-//        int max_id = test_ex4_db();
-        //  	insert_table1(max_id);
-    }
-    public static int test_101() {
-        Statement st = null;
-        ResultSet rs = null;
-        int max_id = -1;
-        //String ip = "localhost";
-        // String ip = "192.168.1.18";
-
-        try {
-            _con = DriverManager.getConnection(_url, _user, _password);
-            st = _con.createStatement();
-            rs = st.executeQuery("SELECT UPDATE_TIME FROM ");
-            if (rs.next()) {
-                System.out.println(rs.getString(1));
-            }
-
-            PreparedStatement pst = _con.prepareStatement("SELECT * FROM test101");
-            rs = pst.executeQuery();
-
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                if(id>max_id) {max_id=id;}
-                System.out.print(id);
-                System.out.print(": ");
-                System.out.print(rs.getString(2));
-                System.out.print(" (");
-                double lat = rs.getDouble(3);
-                System.out.print(lat);
-                System.out.print(", ");
-                double lon = rs.getDouble(4);
-                System.out.print(lon);
-                System.out.println(") ");
-            }
-        } catch (SQLException ex) {
-            Logger lgr = Logger.getLogger(ReadWriteMySQL.class.getName());
-            lgr.log(Level.SEVERE, ex.getMessage(), ex);
-        } finally {
-            try {
-                if (rs != null) {rs.close();}
-                if (st != null) { st.close(); }
-                if (_con != null) { _con.close();  }
-            } catch (SQLException ex) {
-
-                Logger lgr = Logger.getLogger(ReadWriteMySQL.class.getName());
-                lgr.log(Level.WARNING, ex.getMessage(), ex);
-            }
-        }
-        return max_id;
+    public ReadWriteMySQL(String _tableName, String _ip, String _port, String _url, String _user, String _DataBase, String _password) {
+        this._tableName = _tableName;
+        this._ip = _ip;
+        this._port = _port;
+        this._url = _url;
+        this._user = _user;
+        this._DataBase = _DataBase;
+        this._password = _password;
     }
 
-    public static List<WifiPointsTimePlace> readSQL() {
+    public ReadWriteMySQL() {
+    }
+
+//    public static int test_101() {
+//        Statement st = null;
+//        ResultSet rs = null;
+//        int max_id = -1;
+//        //String ip = "localhost";
+//        // String ip = "192.168.1.18";
+//
+//        try {
+//            _con = DriverManager.getConnection(_url, _user, _password);
+//            st = _con.createStatement();
+//            rs = st.executeQuery("SELECT UPDATE_TIME FROM ");
+//            if (rs.next()) {
+//                System.out.println(rs.getString(1));
+//            }
+//
+//            PreparedStatement pst = _con.prepareStatement("SELECT * FROM test101");
+//            rs = pst.executeQuery();
+//
+//            while (rs.next()) {
+//                int id = rs.getInt(1);
+//                if(id>max_id) {max_id=id;}
+//                System.out.print(id);
+//                System.out.print(": ");
+//                System.out.print(rs.getString(2));
+//                System.out.print(" (");
+//                double lat = rs.getDouble(3);
+//                System.out.print(lat);
+//                System.out.print(", ");
+//                double lon = rs.getDouble(4);
+//                System.out.print(lon);
+//                System.out.println(") ");
+//            }
+//        } catch (SQLException ex) {
+//            Logger lgr = Logger.getLogger(ReadWriteMySQL.class.getName());
+//            lgr.log(Level.SEVERE, ex.getMessage(), ex);
+//        } finally {
+//            try {
+//                if (rs != null) {rs.close();}
+//                if (st != null) { st.close(); }
+//                if (_con != null) { _con.close();  }
+//            } catch (SQLException ex) {
+//
+//                Logger lgr = Logger.getLogger(ReadWriteMySQL.class.getName());
+//                lgr.log(Level.WARNING, ex.getMessage(), ex);
+//            }
+//        }
+//        return max_id;
+//    }
+
+    public List<WifiPointsTimePlace> readSQL(HashRouters<String,WIFISample> routersOfAllFiles) {
         List<WifiPointsTimePlace> processedFile = new ArrayList<>();
         WifiPointsTimePlace wifiPointsTimePlace;
         List<WIFISample> wifiPoints = new ArrayList<>();
@@ -136,11 +149,13 @@ public class ReadWriteMySQL {
                         else if(i % 2 == 1 )
                             System.out.print(" FREQ, " + rs.getString(i)+",");
                     }
-                    for (int i =7 ; i<2*numOfWifis+7;i=i+2){
-                        wifiSample = new WIFISample(rs.getString(i),"",wifi_FirstSeen,"2400",rs.getString(i+1),
+                    //
+                    for (int i =8 ; i<2*numOfWifis+8;i=i+2){
+                        wifiSample = new WIFISample(rs.getString(i),"",wifi_FirstSeen,"14",rs.getString(i+1),
                                 wifi_Lat,wifi_Lon,wifi_Alt,"wifi",wifi_Device);
                         wifiPointsTimePlace.addPoint(wifiSample);
 
+                        routersOfAllFiles.addElement(rs.getString(i),wifiSample);
                     }
 
                     processedFile.add(wifiPointsTimePlace);
@@ -164,83 +179,4 @@ public class ReadWriteMySQL {
         }
         return processedFile;
     }
-
-//    public static void insert_table(int max_id) {
-//        Statement st = null;
-//        ResultSet rs = null;
-//        //String ip = "localhost";
-//        // String ip = "192.168.1.18";
-//
-//        try {
-//            _con = DriverManager.getConnection(_url, _user, _password);
-//            st = _con.createStatement();
-//            Date now = null;
-//            for(int i=0;i<5;i++) {
-//                int curr_id = 1+i+max_id;
-//                String str = "INSERT INTO test101 (ID,NAME,pos_lat,pos_lon, time, ap1, ap2, ap3) "
-//                        + "VALUES ("+curr_id+",'test_name"+curr_id+"',"+(32+curr_id)+",35.01,"+now+",'mac1"+curr_id+"', 'mac2', 'mac3')";
-//                PreparedStatement pst = _con.prepareStatement(str);
-//                pst.execute();
-//            }
-//        } catch (SQLException ex) {
-//            Logger lgr = Logger.getLogger(ReadWriteMySQL.class.getName());
-//            lgr.log(Level.SEVERE, ex.getMessage(), ex);
-//        } finally {
-//            try {
-//                if (rs != null) {rs.close();}
-//                if (st != null) { st.close(); }
-//                if (_con != null) { _con.close();  }
-//            } catch (SQLException ex) {
-//
-//                Logger lgr = Logger.getLogger(ReadWriteMySQL.class.getName());
-//                lgr.log(Level.WARNING, ex.getMessage(), ex);
-//            }
-//        }
-//    }
-//    public static void insert_table2(int max_id, WI ws) {
-//        Statement st = null;
-//        ResultSet rs = null;
-//
-//        try {
-//            _con = DriverManager.getConnection(_url, _user, _password);
-//            st = _con.createStatement();
-//
-//            int size = ws.size();
-//            for(int i=0;i<size;i++) {
-//                int curr_id = 1+i+max_id;
-//                WiFi_Scan c = ws.get(i);
-//                String sql = creat_sql(c, curr_id);
-//                PreparedStatement pst = _con.prepareStatement(sql);
-//                System.out.println(sql);
-//                pst.execute();
-//            }
-//        } catch (SQLException ex) {
-//            Logger lgr = Logger.getLogger(ReadWriteMySQL.class.getName());
-//            lgr.log(Level.SEVERE, ex.getMessage(), ex);
-//        } finally {
-//            try {
-//                if (rs != null) {rs.close();}
-//                if (st != null) { st.close(); }
-//                if (_con != null) { _con.close();  }
-//            } catch (SQLException ex) {
-//
-//                Logger lgr = Logger.getLogger(ReadWriteMySQL.class.getName());
-//                lgr.log(Level.WARNING, ex.getMessage(), ex);
-//            }
-//        }
-//    }
-//    private static String creat_sql(WiFi_Scan w, int id) {
-//        String ans = "INSERT INTO ex4_db (ID,time, device,lat,lon,alt, number_of_ap";
-//        String str1 = "", str2="";
-//        Point3D pos = w.get_pos();
-//        int n = w.size();
-//        String in = " VALUES ("+id+",'"+w.get_time()+"','"+w.get_device_id()+"',"+pos.x()+","+pos.y()+","+pos.z()+","+n;
-//        for(int i=0;i<n;i++) {
-//            str1+=",mac"+i+",rssi"+i;
-//            WiFi_AP a = w.get(i);
-//            str2+=",'"+a.get_mac()+"',"+(int)a.get_rssi();
-//        }
-//        ans +=str1+")"+in+str2+")";
-//        return ans;
-//    }
 }

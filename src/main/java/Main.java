@@ -143,15 +143,26 @@ public class Main{
         });
 
         get("/submitDB", (req, res) ->{
-            new File("UserFiles/upload/db").mkdir();
-            processedFile = ReadWriteMySQL.readSQL();
-            OutputCSVWriter.ExportToCSV(processedFile,"UserFiles/upload/"+"db"+"/database.csv",null);
+//            new File("UserFiles/upload/db").mkdir();
+
+            String userName = req.cookie("user");
+            new File("UserFiles/comboFolder/"+userName).mkdir();
+
+
+            if (usersHashRouters.get(userName) == null)
+                usersHashRouters.put(userName,new HashRouters());
+            if (usersProcessedFile.get(userName) == null)
+                usersProcessedFile.put(userName,new ArrayList<>());
+
+            ReadWriteMySQL readWriteMySQL = new ReadWriteMySQL();
+
+            processedFile.addAll(readWriteMySQL.readSQL(usersHashRouters.get(userName)));
+            usersProcessedFile.put(userName,processedFile);
+            OutputCSVWriter.ExportToCSV(processedFile,"UserFiles/comboFolder/"+ userName +"/database.csv",null);
 
             return "";
             //TODO return
         });
-
-
     }
 
     public static void watchService() throws InterruptedException {
