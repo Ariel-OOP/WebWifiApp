@@ -12,6 +12,7 @@ import components.CSV_IO.CoboCSVReader;
 import components.CSV_IO.KmlExporter;
 import components.CSV_IO.OutputCSVWriter;
 import components.Console_App.LineFilters;
+import components.DataBase.ReadWriteMySQL;
 import components.Filters.*;
 import spark.Request;
 import spark.Response;
@@ -140,6 +141,17 @@ public class Main{
         get("/Save2kml", (req, res) ->{
             return Save2kml(req);
         });
+
+        get("/submitDB", (req, res) ->{
+            new File("UserFiles/upload/db").mkdir();
+            processedFile = ReadWriteMySQL.readSQL();
+            OutputCSVWriter.ExportToCSV(processedFile,"UserFiles/upload/"+"db"+"/database.csv",null);
+
+            return "";
+            //TODO return
+        });
+
+
     }
 
     public static void watchService() throws InterruptedException {

@@ -142,6 +142,13 @@
         </div>
     </div>
 
+    <div class="alert alert-success" role="alert">
+        <div class="row">
+            <div class="col-lg-6 col-md-3 col-sm-5">
+                <button id="submitDBinfo" class="btn btn-default" >Read from DB </button>
+            </div>
+        </div>
+    </div>
 
     <div class="alert alert-success" role="alert">
         <div class="row">
@@ -1114,6 +1121,19 @@
         );
         return false
         })
+
+        <!-- Read DataBase boxes -->
+        $("#submitDBinfo").click(function(){
+            $.ajax(
+                {
+                    "url": encodeURI("/submitDB")
+                }
+            ).then(
+                function(output) {
+
+                }
+            );
+        });
     </script>
 
 </body>
