@@ -156,12 +156,15 @@ public class Main{
 
             ReadWriteMySQL readWriteMySQL = new ReadWriteMySQL();
 
-            processedFile.addAll(readWriteMySQL.readSQL(usersHashRouters.get(userName)));
-            usersProcessedFile.put(userName,processedFile);
-            OutputCSVWriter.ExportToCSV(processedFile,"UserFiles/comboFolder/"+ userName +"/database.csv",null);
+            ArrayList<WifiPointsTimePlace> processedFileTemp = new ArrayList<>();
+            processedFileTemp.addAll(readWriteMySQL.readSQL(usersHashRouters.get(userName)));
 
+            processedFile.addAll(processedFileTemp);
+            usersProcessedFile.put(userName,processedFile);
+
+            OutputCSVWriter.ExportToCSV(processedFileTemp,"UserFiles/comboFolder/"+ userName +"/database.csv",null);
+            processedFile = new ArrayList<>();
             return "";
-            //TODO return
         });
     }
 
