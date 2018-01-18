@@ -33,7 +33,10 @@ In the UserFiles folder there are multiple folders.<br><br>
 This project currently uses <strong>Maven</strong> to download jars and to automatically deploy to a heroku server.
 <br>Also, the project heavily depends on the <strong>Spark framework</strong> for routing.
 
-
+# The processes in our system run in parallel.
+### There are two main processes,
+1) a process that is responsible for receiving information from the user that includes Wigle, Combo CSV files and table information for reading, as well as responsible for receiving the filters.
+2) Listens to changes made to files in a folder and can update the table accordingly.
 
 # Other inclusions
 
