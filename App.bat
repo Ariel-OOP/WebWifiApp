@@ -1,1 +1,3 @@
-java -jar wigle-wifi-app-1.0-SNAPSHOT-jar-with-dependencies.jar
+@echo OFF
+java -jar WebWifiApp-all-1.0-SNAPSHOT.jar 
+pause
