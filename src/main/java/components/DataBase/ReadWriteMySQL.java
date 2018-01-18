@@ -21,23 +21,23 @@ import java.util.logging.Logger;
 
 public class ReadWriteMySQL {
 
-    private String _tableName = "oop_course_ariel";
+    private String _tableName = "ex4_db";
     private String _ip = "5.29.193.52";
     private String _port = "3306";
-    private String _url = "jdbc:mysql://"+_ip+":"+_port+"/" + _tableName;
+    private String _DataBase = "oop_course_ariel";
+    private String _url = "jdbc:mysql://"+_ip+":"+_port+"/" + _DataBase;
     private String _user = "oop1";
-    private String _DataBase = "";
     private String _password = "Lambda1();";
     private Connection _con = null;
 
-    public ReadWriteMySQL(String _tableName, String _ip, String _port, String _url, String _user, String _DataBase, String _password) {
+    public ReadWriteMySQL(String _tableName, String _ip, String _port, String _user, String _DataBase, String _password) {
         this._tableName = _tableName;
         this._ip = _ip;
         this._port = _port;
-        this._url = _url;
         this._user = _user;
         this._DataBase = _DataBase;
         this._password = _password;
+        this._url = "jdbc:mysql://"+_ip+":"+_port+"/" + _DataBase;
     }
 
     public ReadWriteMySQL() {
@@ -81,8 +81,8 @@ public class ReadWriteMySQL {
             while (rs.next()) {
                 int size = rs.getInt(7);
                 int len = 8+2*size;
-                if(ind%100==0) {
-                    System.out.println();
+//                if(ind%100==0) {
+//                    System.out.println();
 //                    for(int i=1;i<=7;i++){
 //                        System.out.print(rs.getString(i)+",");
 //                    }
@@ -105,7 +105,7 @@ public class ReadWriteMySQL {
 
                     processedFile.add(wifiPointsTimePlace);
                     System.out.println();
-                }
+//                }
                 ind++;
             }
         } catch (SQLException ex) {

@@ -22,10 +22,15 @@ import webserver.SaveFilter;
 import javax.servlet.MultipartConfigElement;
 import java.io.*;
 import java.nio.file.*;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static spark.Spark.*;
 
@@ -36,6 +41,9 @@ public class Main{
     static Hashtable<String,HashRouters> usersHashRouters;
     static List<WifiPointsTimePlace> processedFile;
     static Hashtable<String,List<WifiPointsTimePlace>> usersProcessedFile;
+
+    private static ArrayBlockingQueue dbUpdate = new ArrayBlockingQueue(1);
+
     //TODO usersProccessedFiles
 
     public static void main(String[] args) throws InterruptedException {
@@ -145,27 +153,58 @@ public class Main{
         get("/submitDB", (req, res) ->{
 //            new File("UserFiles/upload/db").mkdir();
 
-            String userName = req.cookie("user");
-            new File("UserFiles/comboFolder/"+userName).mkdir();
-
-
-            if (usersHashRouters.get(userName) == null)
-                usersHashRouters.put(userName,new HashRouters());
-            if (usersProcessedFile.get(userName) == null)
-                usersProcessedFile.put(userName,new ArrayList<>());
-
-            ReadWriteMySQL readWriteMySQL = new ReadWriteMySQL();
-
-            ArrayList<WifiPointsTimePlace> processedFileTemp = new ArrayList<>();
-            processedFileTemp.addAll(readWriteMySQL.readSQL(usersHashRouters.get(userName)));
-
-            processedFile.addAll(processedFileTemp);
-            usersProcessedFile.put(userName,processedFile);
-
-            OutputCSVWriter.ExportToCSV(processedFileTemp,"UserFiles/comboFolder/"+ userName +"/database.csv",null);
-            processedFile = new ArrayList<>();
-            return "";
+            return submitDB(req);
         });
+    }
+
+    private static Object submitDB(Request req) {
+
+        String[] dbInfo = req.queryString().split(",");
+
+        String dbTableName;
+        String dbIP;
+        String dbPort;
+        String dbName;
+        String dbusername;
+        String dbpassword;
+        if (dbInfo!=null) {
+            dbTableName = dbInfo[0];
+            dbIP = dbInfo[1];
+            dbPort = dbInfo[2];
+            dbName = dbInfo[3];
+            dbusername = dbInfo[4];
+            dbpassword = dbInfo[5];
+            System.out.println(dbTableName);
+        }else {
+            dbTableName = "ex4_db";
+            dbIP = "5.29.193.52";
+            dbPort = "3306";
+            dbName = "oop_course_ariel";
+            dbusername = "oop1";
+            dbpassword = "Lambda1();";
+        }
+
+
+        String userName = req.cookie("user");
+        new File("UserFiles/comboFolder/"+userName).mkdir();
+
+
+        if (usersHashRouters.get(userName) == null)
+            usersHashRouters.put(userName,new HashRouters());
+        if (usersProcessedFile.get(userName) == null)
+            usersProcessedFile.put(userName,new ArrayList<>());
+
+        ReadWriteMySQL readWriteMySQL = new ReadWriteMySQL(dbTableName,dbIP,dbPort,dbusername,dbName,dbpassword);
+
+        ArrayList<WifiPointsTimePlace> processedFileTemp = new ArrayList<>();
+        processedFileTemp.addAll(readWriteMySQL.readSQL(usersHashRouters.get(userName)));
+
+        processedFile.addAll(processedFileTemp);
+        usersProcessedFile.put(userName,processedFile);
+
+        OutputCSVWriter.ExportToCSV(processedFileTemp,"UserFiles/comboFolder/"+ userName +"/database.csv",null);
+        processedFile = new ArrayList<>();
+        return "";
     }
 
     public static void watchService() throws InterruptedException {

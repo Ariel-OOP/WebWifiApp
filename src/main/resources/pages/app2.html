@@ -1134,8 +1134,8 @@
         $("#submitDBinfo").click(function(){
             $.ajax(
                 {
-                    "url": encodeURI("/submitDB?"+$("#inputDBTableName").val() +"&"+ $("#inputDBIP").val()+"&"+ $("#inputDBPort").val()+"&"+ $("#inputDBname").val()
-                        +"&"+ $("#inputDBuserName").val()+"&"+ $("#inputDBuserName").val())
+                    "url": encodeURI("/submitDB?"+$("#inputDBTableName").val() +","+ $("#inputDBIP").val()+","+ $("#inputDBPort").val()+","+ $("#inputDBname").val()
+                        +","+ $("#inputDBuserName").val()+","+ $("#inputDBpassword").val())
                 }
             ).then(
                 function(output) {
