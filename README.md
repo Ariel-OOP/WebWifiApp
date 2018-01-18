@@ -9,12 +9,12 @@ login into username auto for automatic updating feature.
 # Our division into packages is:
 Our project is divided into packages when each package contains several departments that have a common camp.
 ### Packages are:
-Algorithms - Contains the classes responsible for performing algorithm 1, 2 in the assignment.
-Attributes - Contains the classes that represent the data structures and objects that we have in the project.
-CSV_IO - Contains the classes that are responsible for reading the CSV files to their destination and writing the CSV files to Combo CSV and KML.
-Console_App - Contains the classes that are responsible for the Console interface (if something wants to run and not through the GUI Web
-DataBase - Contains the class responsible for reading from a database.
-Filters - Contains the classes responsible for filtering data.
+**Algorithms** - Contains the classes responsible for performing algorithm 1, 2 in the assignment.
+**Attributes** - Contains the classes that represent the data structures and objects that we have in the project.
+**CSV_IO** - Contains the classes that are responsible for reading the CSV files to their destination and writing the CSV files to Combo CSV and KML.
+**Console_App** - Contains the classes that are responsible for the Console interface (if something wants to run and not through the GUI Web
+**DataBase** - Contains the class responsible for reading from a database.
+**Filters** - Contains the classes responsible for filtering data.
 
 # Instructions:
 
