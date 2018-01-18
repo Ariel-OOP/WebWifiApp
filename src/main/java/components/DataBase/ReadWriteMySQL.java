@@ -70,12 +70,12 @@ public class ReadWriteMySQL {
         try {
             _con = DriverManager.getConnection(_url, _user, _password);
             st = _con.createStatement();
-            rs = st.executeQuery("SELECT UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = 'oop_course_ariel' AND TABLE_NAME = 'ex4_db'");
-            if (rs.next()) {
-                System.out.println("**** Update: "+rs.getString(1));
-            }
+//            rs = st.executeQuery("SELECT UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA = '"+ _DataBase + "' AND TABLE_NAME = 'ex4_db'");
+//            if (rs.next()) {
+//                System.out.println("**** Update: "+rs.getString(1));
+//            }
 
-            PreparedStatement pst = _con.prepareStatement("SELECT * FROM ex4_db");
+            PreparedStatement pst = _con.prepareStatement("SELECT * FROM " + _tableName);
             rs = pst.executeQuery();
             int ind=0;
             while (rs.next()) {
@@ -104,7 +104,7 @@ public class ReadWriteMySQL {
                     }
 
                     processedFile.add(wifiPointsTimePlace);
-                    System.out.println();
+//                    System.out.println();
 //                }
                 ind++;
             }
